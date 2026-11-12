@@ -1,0 +1,28 @@
+# Dépendances
+node_modules/
+
+# Builds et caches
+dist/
+out-tsc/
+.angular/
+coverage/
+*.tsbuildinfo
+
+# Environnement et secrets
+.env
+.env.*
+!.env.example
+
+# Fichiers téléversés (jamais versionnés)
+backend/data/
+
+# Éditeurs et systèmes
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+
+# Journaux
+*.log
+npm-debug.log*
