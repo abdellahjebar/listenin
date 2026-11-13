@@ -1,5 +1,7 @@
 version: 2
 
+# Les mises à jour majeures qui engagent une décision sont ignorées ici :
+# on les adopte volontairement, avec une décision d'architecture, pas par défaut.
 updates:
   - package-ecosystem: npm
     directory: /backend
@@ -9,6 +11,13 @@ updates:
     groups:
       minor-and-patch:
         update-types: [minor, patch]
+    ignore:
+      # Les types doivent suivre la version de Node utilisée à l'exécution (24).
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']
+      # Version majeure à adopter après vérification de l'outillage (lint, tests, build).
+      - dependency-name: typescript
+        update-types: ['version-update:semver-major']
 
   - package-ecosystem: npm
     directory: /frontend
@@ -18,16 +27,27 @@ updates:
     groups:
       minor-and-patch:
         update-types: [minor, patch]
+    ignore:
+      # Angular impose sa propre plage de versions de TypeScript.
+      - dependency-name: typescript
+        update-types: ['version-update:semver-major']
 
   - package-ecosystem: docker
     directory: /backend
     schedule:
       interval: weekly
+    ignore:
+      # On reste sur une version LTS de Node : les versions impaires n'en sont pas.
+      - dependency-name: node
+        update-types: ['version-update:semver-major']
 
   - package-ecosystem: docker
     directory: /frontend
     schedule:
       interval: weekly
+    ignore:
+      - dependency-name: node
+        update-types: ['version-update:semver-major']
 
   - package-ecosystem: github-actions
     directory: /
