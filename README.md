@@ -98,7 +98,8 @@ Dependabot propose chaque semaine les mises à jour des dépendances npm, des im
 
 ## Méthode de travail
 
-- Une **branche par fonctionnalité** et une **pull request**, même en solo.
+- Une **issue** par travail (trois formulaires : user story, tâche technique, décision), suivie dans le projet GitHub du dépôt.
+- Une **branche** `type/N-titre-court` et une **pull request** « Closes #N » par issue, même en solo ; fusion en squash, **pas de push direct sur `main`** (voir l'[ADR 0004](docs/adr/0004-gestion-du-travail.md)).
 - **Commits en français**, avec un préfixe (`feat`, `fix`, `chore`, `docs`, `test`, `ci`, `refactor`), un commit par étape.
 - Toute route ajoutée ou modifiée met à jour le contrat OpenAPI dans la même pull request (voir l'[ADR 0003](docs/adr/0003-contrat-api-openapi.md)).
 - Les **règles d'autorisation** (qui voit ou modifie quoi) sont couvertes par des tests.

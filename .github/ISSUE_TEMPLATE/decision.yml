@@ -1,0 +1,39 @@
+name: Décision
+description: Un choix à étudier, puis à consigner dans un ADR
+title: "[Décision] "
+labels: ["type:adr"]
+body:
+  - type: textarea
+    id: probleme
+    attributes:
+      label: Problème
+      description: La question à trancher et son contexte.
+    validations:
+      required: true
+  - type: textarea
+    id: options
+    attributes:
+      label: Options envisagées
+      description: Au moins deux options, avec leurs avantages et leurs inconvénients.
+      placeholder: |
+        * Option A : …
+        * Option B : …
+  - type: textarea
+    id: criteres
+    attributes:
+      label: Critères de choix
+      description: Ce qui compte pour décider (coût, risque, maintenance, sécurité…).
+  - type: dropdown
+    id: reversibilite
+    attributes:
+      label: Réversibilité
+      description: Que coûterait un retour en arrière ?
+      options:
+        - Facile
+        - Modérée
+        - Coûteuse
+  - type: input
+    id: echeance
+    attributes:
+      label: À décider avant
+      description: L'étape ou la date qui impose de trancher.
