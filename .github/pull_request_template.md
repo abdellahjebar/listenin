@@ -1,3 +1,7 @@
+## Issue liée
+
+Closes #
+
 ## Résumé
 
 <!-- Quoi et pourquoi, en deux ou trois phrases. -->

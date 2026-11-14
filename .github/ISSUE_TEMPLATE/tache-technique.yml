@@ -1,0 +1,25 @@
+name: Tâche technique
+description: Un travail technique sans valeur visible directe pour l'utilisateur
+title: "[Tech] "
+labels: ["type:tech"]
+body:
+  - type: textarea
+    id: objectif
+    attributes:
+      label: Objectif
+      description: Pourquoi ce travail est nécessaire.
+    validations:
+      required: true
+  - type: textarea
+    id: travail
+    attributes:
+      label: Travail à faire
+      description: Une case à cocher par étape.
+      placeholder: "- [ ] …"
+    validations:
+      required: true
+  - type: textarea
+    id: termine
+    attributes:
+      label: Définition de terminé
+      description: Comment savoir que c'est fini (tests, CI, documentation).

@@ -7,6 +7,7 @@ Une décision notable, une page. Les ADR forment un **journal en ajout seulement
 | [0001](0001-stack-et-style-darchitecture.md) | Stack et style d'architecture | Acceptée (format initial) |
 | [0002](0002-methodologie-documentaire.md) | Méthodologie documentaire | Acceptée |
 | [0003](0003-contrat-api-openapi.md) | Contrat d'API avec OpenAPI | Acceptée |
+| [0004](0004-gestion-du-travail.md) | Gestion du travail : issues, projet, pull requests | Acceptée |
 
 ## Modèle (MADR « minimal »)
 
