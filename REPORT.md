@@ -28,4 +28,4 @@ Aucune fonctionnalité métier pour l'instant : la prochaine étape est la docum
 | Images Docker | à valider par la CI (le moteur Docker local n'était pas démarré) |
 
 ## 6. Utilisation d'un assistant IA
-Le projet est mené avec un assistant IA selon la méthode « plan d'abord, validation avant modification, une étape par commit » décrite dans [AGENTS.md](AGENTS.md).
+Le projet est mené avec un assistant IA selon la méthode « plan d'abord, validation avant modification, une étape par commit ».

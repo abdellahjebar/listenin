@@ -23,6 +23,10 @@ backend/data/
 .DS_Store
 Thumbs.db
 
+# Fichiers privés : règles de travail avec l'assistant IA, jamais versionnés
+/AGENTS.md
+/CLAUDE.md
+
 # Journaux
 *.log
 npm-debug.log*

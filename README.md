@@ -87,7 +87,6 @@ backend/      API Express 5 + TypeScript strict
 frontend/     Application Angular 22
 docs/         produit, architecture, déploiement, décisions (ADR)
 .github/      CI, Dependabot, modèle de pull request
-AGENTS.md     règles de travail avec un assistant IA
 REPORT.md     rapport d'avancement (jalon du cours Technologies Web)
 ```
 
@@ -119,7 +118,6 @@ Dependabot propose chaque semaine les mises à jour des dépendances npm, des im
 - [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) : déploiement (décisions reportées)
 - [docs/adr/](docs/adr/) : décisions d'architecture
 - [REPORT.md](REPORT.md) : rapport d'avancement
-- [AGENTS.md](AGENTS.md) : règles pour les assistants IA
 
 ## Licence
 
