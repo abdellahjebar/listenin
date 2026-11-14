@@ -100,7 +100,7 @@ Dependabot propose chaque semaine les mises à jour des dépendances npm, des im
 
 - Une **branche par fonctionnalité** et une **pull request**, même en solo.
 - **Commits en français**, avec un préfixe (`feat`, `fix`, `chore`, `docs`, `test`, `ci`, `refactor`), un commit par étape.
-- Toute route ajoutée ou modifiée met à jour le contrat d'API dans la même pull request.
+- Toute route ajoutée ou modifiée met à jour le contrat OpenAPI dans la même pull request (voir l'[ADR 0003](docs/adr/0003-contrat-api-openapi.md)).
 - Les **règles d'autorisation** (qui voit ou modifie quoi) sont couvertes par des tests.
 
 ## Feuille de route
@@ -117,6 +117,7 @@ Dependabot propose chaque semaine les mises à jour des dépendances npm, des im
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) : architecture cible et état actuel
 - [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) : déploiement (décisions reportées)
 - [docs/adr/](docs/adr/) : décisions d'architecture
+- [docs/METHODOLOGIE.md](docs/METHODOLOGIE.md) : méthodes de documentation et de décision étudiées
 - [REPORT.md](REPORT.md) : rapport d'avancement
 
 ## Licence
