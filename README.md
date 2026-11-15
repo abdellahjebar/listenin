@@ -22,15 +22,17 @@ Un musicien y présente ce qu'il a joué, et on l'**écoute** avant de l'engager
 ## Architecture
 
 ```text
-Navigateur ──► Frontend (Angular 22) ──► API (Express 5, TypeScript) ──► MongoDB
+Navigateur ──► Frontend (Angular 22) ──► API (Express 5, TypeScript) ──► base de données
+                                                    └──► stockage audio
 ```
 
-- **Monolithe modulaire** : un seul backend déployable, découpé par domaine (identité, profil, portfolio, réseau, recherche). Pas de microservices.
+- **Monolithe modulaire** : un seul backend déployable, découpé par domaine (identité, profil, portfolio, découverte et recherche, confiance). Pas de microservices.
 - **Frontend** : composants standalone, Signals, routes chargées par fonctionnalité.
 - **Configuration** par variables d'environnement, validée au démarrage ; aucun secret dans le dépôt.
+- **Base de données et stockage audio** : choix à venir, par ADR, avant la première tranche.
 - **Déploiement** : une image Docker par application. La chaîne de livraison viendra plus tard (voir [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)).
 
-Détails et décisions : [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) et [docs/adr/](docs/adr/).
+Schémas C4 et décisions : [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) et [docs/adr/](docs/adr/).
 
 ## Prérequis
 
@@ -118,7 +120,8 @@ Dependabot propose chaque semaine les mises à jour des dépendances npm, des im
 - [docs/USER-STORIES.md](docs/USER-STORIES.md) : user stories et critères d'acceptation
 - [docs/DOMAIN.md](docs/DOMAIN.md) : domaines, glossaire et invariants
 - [docs/AUTHORIZATION.md](docs/AUTHORIZATION.md) : matrice d'autorisation
-- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) : architecture cible et état actuel
+- [docs/QUALITY.md](docs/QUALITY.md) : exigences de qualité (sécurité, performance, accessibilité…)
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) : schémas C4 (contexte, conteneurs) et état actuel
 - [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) : déploiement (décisions reportées)
 - [docs/adr/](docs/adr/) : décisions d'architecture
 - [docs/METHODOLOGIE.md](docs/METHODOLOGIE.md) : méthodes de documentation et de décision étudiées
