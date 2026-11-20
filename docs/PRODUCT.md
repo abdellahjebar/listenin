@@ -36,7 +36,7 @@ Deux personas fictifs guident les choix :
 | Profil | 3. Remplir son profil · 4. Afficher un moyen de contact · 5. Consulter le profil d'un musicien |
 | Portfolio | 6. Déposer une piste · 7. Gérer ses pistes · 8. Choisir la visibilité · 9. Écouter une piste |
 | Découvrir | 10. Parcourir les pistes récentes |
-| Recherche | 11. Chercher des musiciens · 12. Chercher des pistes |
+| Recherche | 11. Chercher des musiciens · 12. Chercher des pistes (par les mots du titre) |
 | Confiance | 13. Signaler une piste |
 
 ## Hors périmètre du palier 1
@@ -69,5 +69,5 @@ Un essai avec de vrais musiciens est le critère du palier suivant : il suppose 
 
 ## Questions ouvertes
 - Instruments et genres : liste fermée ou saisie libre ? À décider à la tranche « profil ».
-- Formats audio, taille et durée maximales : à décider à la tranche « portfolio », avec le stockage.
+- Formats audio, taille et durée maximales : à décider à la tranche « portfolio » (le stockage est choisi : ADR 0005).
 - Politique de mot de passe et durée de session : à décider dans l'ADR d'authentification.
