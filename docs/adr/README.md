@@ -8,6 +8,7 @@ Une décision notable, une page. Les ADR forment un **journal en ajout seulement
 | [0002](0002-methodologie-documentaire.md) | Méthodologie documentaire | Acceptée |
 | [0003](0003-contrat-api-openapi.md) | Contrat d'API avec OpenAPI | Acceptée |
 | [0004](0004-gestion-du-travail.md) | Gestion du travail : issues, projet, pull requests | Acceptée |
+| [0005](0005-base-de-donnees-mongodb.md) | MongoDB seul pour les données et les fichiers audio | Acceptée |
 
 ## Modèle (MADR « minimal »)
 

@@ -93,8 +93,9 @@ Référence des critères d'acceptation. Le cadrage est dans [PRODUCT.md](PRODUC
 - Étant donné un visiteur non connecté, quand il cherche, alors l'accès est refusé.
 
 ### 12. Chercher des pistes
-*En tant que membre, je veux chercher un morceau par son titre, afin de le retrouver.*
-- Étant donné un membre, quand il saisit une partie d'un titre, alors il obtient les pistes *membres* correspondantes, sans tenir compte de la casse, par pages.
+*En tant que membre, je veux chercher un morceau par les mots de son titre, afin de le retrouver.*
+- Étant donné un membre, quand il saisit un ou plusieurs mots d'un titre, alors il obtient les pistes *membres* dont le titre contient ces mots, sans tenir compte de la casse ni des accents, par pages.
+- Étant donné un début de mot seulement (« blu » pour « blues »), alors la piste n'est pas trouvée : la recherche porte sur des mots entiers (ADR 0005).
 - Étant donné des pistes privées dont le titre correspond, alors elles n'apparaissent pas, même pour leur propriétaire (il les retrouve dans « Mes pistes »).
 - Étant donné aucun résultat, alors un message le dit.
 

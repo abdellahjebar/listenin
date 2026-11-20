@@ -22,14 +22,14 @@ Un musicien y présente ce qu'il a joué, et on l'**écoute** avant de l'engager
 ## Architecture
 
 ```text
-Navigateur ──► Frontend (Angular 22) ──► API (Express 5, TypeScript) ──► base de données
-                                                    └──► stockage audio
+Navigateur ──► Frontend (Angular 22) ──► API (Express 5, TypeScript) ──► MongoDB
+                                                    (données + fichiers audio dans GridFS)
 ```
 
 - **Monolithe modulaire** : un seul backend déployable, découpé par domaine (identité, profil, portfolio, découverte et recherche, confiance). Pas de microservices.
 - **Frontend** : composants standalone, Signals, routes chargées par fonctionnalité.
 - **Configuration** par variables d'environnement, validée au démarrage ; aucun secret dans le dépôt.
-- **Base de données et stockage audio** : choix à venir, par ADR, avant la première tranche.
+- **Données** : MongoDB, fichiers audio compris (GridFS), voir l'[ADR 0005](docs/adr/0005-base-de-donnees-mongodb.md).
 - **Déploiement** : une image Docker par application. La chaîne de livraison viendra plus tard (voir [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)).
 
 Schémas C4 et décisions : [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) et [docs/adr/](docs/adr/).

@@ -9,7 +9,7 @@ frontend/  Angular 22, application vide
 backend/   Express 5 + TypeScript, route GET /api/health, configuration validée, journaux structurés
 ```
 
-Aucune base de données, authentification ni stockage de fichiers n'est encore branché.
+Aucune base de données, authentification ni stockage de fichiers n'est encore branché. La base est choisie (ADR 0005) ; elle sera branchée à la première tranche.
 
 ## Niveau 1 : contexte
 
@@ -31,7 +31,7 @@ Au palier 1, ListenIn ne dépend d'**aucun système externe**. Le premier viendr
 
 ## Niveau 2 : conteneurs
 
-Les unités qui se déploient ou stockent des données.
+Les unités qui se déploient ou stockent des données. La base de données et le stockage audio sont deux rôles d'une **même instance MongoDB** (ADR 0005).
 
 ```mermaid
 flowchart TB
@@ -40,8 +40,8 @@ flowchart TB
     subgraph LI["ListenIn"]
         W["<b>Application web</b><br/>Angular 22, servie par nginx<br/>écrans, appels à l'API"]
         A["<b>API</b><br/>Express 5, Node 24, TypeScript<br/>règles métier, autorisation,<br/>validation des entrées"]
-        D[("<b>Base de données</b><br/>comptes, profils, pistes,<br/>attestations, signalements<br/>(choix : ADR à venir)")]
-        S[("<b>Stockage audio</b><br/>fichiers des pistes<br/>(choix : ADR à venir)")]
+        D[("<b>MongoDB</b><br/>comptes, profils, pistes,<br/>attestations, signalements")]
+        S[("<b>MongoDB GridFS</b><br/>fichiers des pistes")]
     end
 
     U -- "HTTPS : pages et fichiers statiques" --> W
@@ -54,8 +54,8 @@ flowchart TB
 |---|---|---|
 | **Application web** | Affiche les écrans, appelle l'API, gère l'état d'affichage avec les Signals | Ne protège aucune donnée : un contrôle côté frontend n'est qu'une aide à l'ergonomie |
 | **API** | Seul point d'entrée vers les données ; applique la matrice d'autorisation ; sert le son d'une piste après avoir vérifié les droits | Ne sert pas les pages |
-| **Base de données** | Données structurées des cinq domaines | N'est jamais exposée au navigateur |
-| **Stockage audio** | Contenu des fichiers | N'est jamais exposé directement au navigateur (SEC-6) |
+| **Base de données** (MongoDB) | Données des cinq domaines | N'est jamais exposée au navigateur |
+| **Stockage audio** (GridFS, dans la même instance MongoDB) | Contenu des fichiers | N'est jamais exposé directement au navigateur (SEC-6) |
 
 **Même origine.** En production, le navigateur voit l'application et l'API sous **une seule adresse** (`/` et `/api`), derrière un proxy inverse. Cela évite d'ouvrir l'API à d'autres origines (CORS) et simplifie la session. En développement, le serveur Angular joue ce rôle de proxy.
 
@@ -90,6 +90,5 @@ Chaque complexité n'entre que si son déclencheur apparaît.
 
 Avant la première tranche :
 
-- **Base de données** : MongoDB est envisagé (ADR 0001), à confirmer par une étude comparative.
 - **Authentification et session** : mécanisme de session, algorithme de hachage, limitation des tentatives, politique de mot de passe.
-- **Stockage audio** : disque local, ou stockage objet derrière une interface (POR-3) ; formats et taille maximale.
+- **Fichiers audio** : formats acceptés, taille et durée maximales (le stockage est choisi : GridFS, ADR 0005).
