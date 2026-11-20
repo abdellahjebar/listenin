@@ -40,7 +40,7 @@ flowchart TB
     subgraph LI["ListenIn"]
         W["<b>Application web</b><br/>Angular 22, servie par nginx<br/>écrans, appels à l'API"]
         A["<b>API</b><br/>Express 5, Node 24, TypeScript<br/>règles métier, autorisation,<br/>validation des entrées"]
-        D[("<b>MongoDB</b><br/>comptes, profils, pistes,<br/>attestations, signalements")]
+        D[("<b>MongoDB</b><br/>comptes, sessions, profils, pistes,<br/>attestations, signalements")]
         S[("<b>MongoDB GridFS</b><br/>fichiers des pistes")]
     end
 
@@ -88,7 +88,7 @@ Chaque complexité n'entre que si son déclencheur apparaît.
 
 ## Décisions à venir
 
-Avant la première tranche :
+Pendant les tranches :
 
-- **Authentification et session** : mécanisme de session, algorithme de hachage, limitation des tentatives, politique de mot de passe.
-- **Fichiers audio** : formats acceptés, taille et durée maximales (le stockage est choisi : GridFS, ADR 0005).
+- **Fichiers audio** (tranche « portfolio ») : formats acceptés, taille et durée maximales.
+- **Instruments et genres** (tranche « profil ») : liste fermée ou saisie libre.
