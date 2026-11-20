@@ -11,6 +11,7 @@ Qui peut faire quoi au palier 1. Chaque ligne devient au moins un **test d'API**
 | Ressource d'un autre membre que l'on n'a pas le droit de voir (piste privée) | **404** : refus **sans révéler** qu'elle existe |
 | Modification ou suppression de la piste d'un autre, même visible | **404**, pour une règle unique sur les pistes des autres |
 | Données invalides | **400**, avec le champ en erreur |
+| Trop de tentatives (connexion, inscription) | **429**, message neutre (ADR 0006) |
 
 Une seule règle à retenir : **ce qu'on n'a pas le droit de toucher n'existe pas pour nous.** On n'utilise pas le code 403 au palier 1.
 
@@ -54,7 +55,10 @@ Au-delà des droits sur une action, ce que **contiennent** les réponses :
 
 Pour chaque ligne A1 à A20 : un test par cas ✅ et un test par cas ❌, plus un test par règle F1 à F4. Les tests nomment la ligne qu'ils couvrent (par exemple `A14 : un membre ne peut pas écouter la piste privée d'un autre (404)`), pour que la matrice reste la table de couverture.
 
-## Points à trancher ailleurs
+## Points tranchés ailleurs
 
-- **Inscription avec une adresse déjà utilisée** : la story 1 donne un message clair, ce qui révèle l'existence d'un compte. À trancher dans l'ADR d'authentification.
+- **Inscription avec une adresse déjà utilisée** : message clair, risque accepté (ADR 0006).
+
+## Points à confirmer
+
 - **A18, se signaler soi-même** : refusé (400) parce que ça n'a pas de sens. À confirmer.

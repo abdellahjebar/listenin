@@ -70,4 +70,3 @@ Un essai avec de vrais musiciens est le critère du palier suivant : il suppose 
 ## Questions ouvertes
 - Instruments et genres : liste fermée ou saisie libre ? À décider à la tranche « profil ».
 - Formats audio, taille et durée maximales : à décider à la tranche « portfolio » (le stockage est choisi : ADR 0005).
-- Politique de mot de passe et durée de session : à décider dans l'ADR d'authentification.

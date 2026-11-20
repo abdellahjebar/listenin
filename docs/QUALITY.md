@@ -10,15 +10,17 @@ Chaque exigence a une **vérification**. Une exigence qu'on ne sait pas vérifie
 
 | N° | Exigence | Vérification |
 |---|---|---|
-| SEC-1 | Les mots de passe sont **hachés** avec un algorithme conçu pour cela ; ils ne sont jamais stockés, renvoyés ni journalisés en clair. L'algorithme est choisi dans l'ADR d'authentification | test + revue |
+| SEC-1 | Les mots de passe sont **hachés** avec un algorithme conçu pour cela ; ils ne sont jamais stockés, renvoyés ni journalisés en clair. Algorithme : Argon2id (ADR 0006) | test + revue |
 | SEC-2 | L'autorisation est appliquée **par l'API**, selon [AUTHORIZATION.md](AUTHORIZATION.md). Le frontend ne protège rien | tests A1 à A20 et F1 à F4 |
 | SEC-3 | Toute entrée est **validée à la frontière** HTTP par un schéma ; une entrée invalide reçoit 400 et ne touche pas aux données | tests |
-| SEC-4 | Le secret de session **n'est pas lisible** par le JavaScript de la page | test des en-têtes de réponse |
-| SEC-5 | Les tentatives de connexion et d'inscription sont **limitées** par adresse IP ; les seuils sont fixés dans l'ADR d'authentification | test |
+| SEC-4 | Le secret de session **n'est pas lisible** par le JavaScript de la page : cookie `HttpOnly`, `Secure`, `SameSite=Strict` (ADR 0006) | test des en-têtes de réponse |
+| SEC-5 | Les tentatives de connexion et d'inscription sont **limitées** ; au-delà, 429. Seuils dans l'ADR 0006 | test |
 | SEC-6 | Un fichier audio est vérifié par son **contenu**, pas seulement par son extension ; sa taille est plafonnée ; il n'est jamais servi par une adresse publique devinable, et son accès suit les droits de sa piste (A13, A14) | tests |
 | SEC-7 | Les réponses portent les **en-têtes de sécurité** (helmet côté API, en-têtes nginx côté frontend) | test (déjà en place pour l'API) |
 | SEC-8 | Aucun secret dans le dépôt ; aucune dépendance de production avec une faille **haute** ou **critique** connue | CI : `npm audit` (en place) |
 | SEC-9 | Les journaux ne contiennent ni mot de passe, ni en-tête `Authorization`, ni cookie | test du masquage (en place) + revue |
+| SEC-10 | Toute requête qui modifie des données est refusée si son en-tête `Origin` n'est pas celui de ListenIn (CSRF) | test |
+| SEC-11 | Un mot de passe de moins de 15 caractères ou présent dans la liste des mots de passe courants est refusé | tests |
 
 ## Fiabilité
 
