@@ -114,7 +114,8 @@ Dependabot propose chaque semaine les mises à jour des dépendances npm, des im
 
 ## Documentation
 
-- [docs/PRODUCT.md](docs/PRODUCT.md) : vision et périmètre
+- [docs/PRODUCT.md](docs/PRODUCT.md) : vision et périmètre du palier 1
+- [docs/USER-STORIES.md](docs/USER-STORIES.md) : user stories et critères d'acceptation
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) : architecture cible et état actuel
 - [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) : déploiement (décisions reportées)
 - [docs/adr/](docs/adr/) : décisions d'architecture
