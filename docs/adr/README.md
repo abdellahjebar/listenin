@@ -10,6 +10,7 @@ Une décision notable, une page. Les ADR forment un **journal en ajout seulement
 | [0004](0004-gestion-du-travail.md) | Gestion du travail : issues, projet, pull requests | Acceptée |
 | [0005](0005-base-de-donnees-mongodb.md) | MongoDB seul pour les données et les fichiers audio | Acceptée |
 | [0006](0006-authentification-et-session.md) | Authentification par session côté serveur | Acceptée |
+| [0007](0007-outillage-openapi.md) | Outillage du contrat OpenAPI (complète 0003) | Acceptée |
 
 ## Modèle (MADR « minimal »)
 

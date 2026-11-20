@@ -68,7 +68,7 @@ L'interface est en **français** au palier 1 ; la traduction n'est pas prévue.
 | MAI-1 | Aucune fusion dans `main` sans **CI verte** : formatage, lint, types stricts, tests, build | CI (en place) |
 | MAI-2 | Chaque critère d'acceptation de [USER-STORIES.md](USER-STORIES.md) est couvert par **au moins un test**. Le taux de couverture sert d'indicateur, pas d'objectif | revue de pull request |
 | MAI-3 | Un module du backend ne lit ni n'écrit **les données d'un autre** ; il passe par l'interface que l'autre expose ([DOMAIN.md](DOMAIN.md)) | revue, puis règle de lint dès qu'il y a deux modules |
-| MAI-4 | Le contrat **OpenAPI** décrit exactement les routes en place (ADR 0003) | revue, puis test automatique quand l'outillage sera choisi |
+| MAI-4 | Le contrat **OpenAPI** décrit exactement les routes en place (ADR 0003) | CI : `redocly lint`, validation des réponses dans les tests, types Angular à jour (ADR 0007) |
 
 ## Portabilité
 

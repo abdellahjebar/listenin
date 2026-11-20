@@ -71,7 +71,7 @@ Un schéma de niveau 3 (composants) ne sera dessiné que pour un module devenu c
 - **Entrées non fiables** : validation à la frontière HTTP.
 - **Configuration par environnement**, validée au démarrage ; aucun secret dans le dépôt.
 - **Observabilité** : journaux JSON, identifiant de requête, point de santé.
-- **Contrat d'abord** : toute route est décrite dans le contrat OpenAPI (ADR 0003).
+- **Contrat d'abord** : toute route est décrite dans `backend/openapi.yaml` avant d'être codée ; l'API valide requêtes et réponses par rapport à lui (ADR 0003, ADR 0007).
 
 ## « Pas maintenant »
 
