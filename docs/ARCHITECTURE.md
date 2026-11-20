@@ -1,47 +1,95 @@
 # Architecture
 
+Vue d'ensemble du système, selon le modèle C4 : le **contexte** (niveau 1) puis les **conteneurs** (niveau 2). Les domaines sont décrits dans [DOMAIN.md](DOMAIN.md), les exigences de qualité dans [QUALITY.md](QUALITY.md), les choix dans [adr/](adr/).
+
 ## État actuel
+
 ```text
 frontend/  Angular 22, application vide
 backend/   Express 5 + TypeScript, route GET /api/health, configuration validée, journaux structurés
 ```
-Aucune base de données ni authentification n'est encore branchée.
 
-## Architecture cible
-```text
-Navigateur ──► Frontend (Angular) ──► API (Express) ──► MongoDB
-                                         └──► stockage des fichiers audio
+Aucune base de données, authentification ni stockage de fichiers n'est encore branché.
+
+## Niveau 1 : contexte
+
+Qui utilise ListenIn, et avec quoi il communique.
+
+```mermaid
+flowchart TB
+    V["Visiteur<br/>(non connecté)"]
+    M["Membre<br/>(musicien connecté)"]
+    E["Exploitant<br/>(opère ListenIn)"]
+    L["<b>ListenIn</b><br/>profils, portfolio audio,<br/>découverte et recherche"]
+
+    V -- "s'inscrit, se connecte" --> L
+    M -- "gère son profil et ses pistes,<br/>découvre, écoute, signale" --> L
+    E -. "traite les signalements à la main<br/>(aucun écran au palier 1)" .-> L
 ```
 
-**Monolithe modulaire** : un seul backend déployable, organisé en domaines indépendants.
+Au palier 1, ListenIn ne dépend d'**aucun système externe**. Le premier viendra avec le « mot de passe oublié » (un service d'envoi d'e-mails), point bloquant avant ouverture.
 
-| Domaine | Responsabilité |
-|---|---|
-| Identité | comptes, authentification, session |
-| Profil | informations du musicien |
-| Portfolio | pistes audio, visibilité (privée ou publique) |
-| Réseau | contacts, partages |
-| Recherche | recherche de pistes et de musiciens |
+## Niveau 2 : conteneurs
 
-Chaque domaine possède ses routes, sa logique et ses modèles, et n'expose aux autres qu'une interface claire. Le découpage se fait **au fur et à mesure** des tranches, sans grande refonte préalable.
+Les unités qui se déploient ou stockent des données.
+
+```mermaid
+flowchart TB
+    U["Navigateur<br/>du membre"]
+
+    subgraph LI["ListenIn"]
+        W["<b>Application web</b><br/>Angular 22, servie par nginx<br/>écrans, appels à l'API"]
+        A["<b>API</b><br/>Express 5, Node 24, TypeScript<br/>règles métier, autorisation,<br/>validation des entrées"]
+        D[("<b>Base de données</b><br/>comptes, profils, pistes,<br/>attestations, signalements<br/>(choix : ADR à venir)")]
+        S[("<b>Stockage audio</b><br/>fichiers des pistes<br/>(choix : ADR à venir)")]
+    end
+
+    U -- "HTTPS : pages et fichiers statiques" --> W
+    U -- "HTTPS, JSON sous /api,<br/>flux audio (requêtes partielles)" --> A
+    A -- "lit et écrit" --> D
+    A -- "dépose, lit, supprime" --> S
+```
+
+| Conteneur | Rôle | Ne fait pas |
+|---|---|---|
+| **Application web** | Affiche les écrans, appelle l'API, gère l'état d'affichage avec les Signals | Ne protège aucune donnée : un contrôle côté frontend n'est qu'une aide à l'ergonomie |
+| **API** | Seul point d'entrée vers les données ; applique la matrice d'autorisation ; sert le son d'une piste après avoir vérifié les droits | Ne sert pas les pages |
+| **Base de données** | Données structurées des cinq domaines | N'est jamais exposée au navigateur |
+| **Stockage audio** | Contenu des fichiers | N'est jamais exposé directement au navigateur (SEC-6) |
+
+**Même origine.** En production, le navigateur voit l'application et l'API sous **une seule adresse** (`/` et `/api`), derrière un proxy inverse. Cela évite d'ouvrir l'API à d'autres origines (CORS) et simplifie la session. En développement, le serveur Angular joue ce rôle de proxy.
+
+## À l'intérieur de l'API : un monolithe modulaire
+
+L'API est **un seul** déployable, découpé en modules qui suivent les domaines de [DOMAIN.md](DOMAIN.md) : Identité, Profil, Portfolio, Découverte et recherche, Confiance. Chaque module possède ses routes, sa logique et ses données, et n'expose aux autres qu'une interface (MAI-3). Le découpage se fait **au fil des tranches**, sans refonte préalable.
+
+Un schéma de niveau 3 (composants) ne sera dessiné que pour un module devenu complexe.
 
 ## Principes
-- **Autorisation au backend** : le frontend n'améliore que l'ergonomie, il ne protège rien.
+
+- **Autorisation dans l'API**, testée ligne par ligne ([AUTHORIZATION.md](AUTHORIZATION.md)).
 - **Entrées non fiables** : validation à la frontière HTTP.
 - **Configuration par environnement**, validée au démarrage ; aucun secret dans le dépôt.
 - **Observabilité** : journaux JSON, identifiant de requête, point de santé.
-- **Tests des règles d'accès**, y compris les refus.
+- **Contrat d'abord** : toute route est décrite dans le contrat OpenAPI (ADR 0003).
 
 ## « Pas maintenant »
+
 Chaque complexité n'entre que si son déclencheur apparaît.
 
 | Pas maintenant | On l'ajoute quand |
 |---|---|
 | File de tâches | un traitement audio en arrière-plan est nécessaire (transcodage, forme d'onde) |
-| Moteur de recherche dédié | la recherche par index de la base devient trop limitée |
-| Microservices | un composant ou une équipe doit se déployer seul |
+| Moteur de recherche dédié | les index de la base ne suffisent plus (PERF-2, PERF-4) |
+| Cache partagé | une mesure montre qu'une lecture répétée coûte trop cher |
+| Microservices | un module doit se déployer ou passer à l'échelle seul |
 | Infrastructure as code | on dépasse un environnement simple |
 | Gestion d'état globale (NgRx) | les Signals ne suffisent plus à partager l'état |
 
-## Décisions
-Voir [adr/](adr/).
+## Décisions à venir
+
+Avant la première tranche :
+
+- **Base de données** : MongoDB est envisagé (ADR 0001), à confirmer par une étude comparative.
+- **Authentification et session** : mécanisme de session, algorithme de hachage, limitation des tentatives, politique de mot de passe.
+- **Stockage audio** : disque local, ou stockage objet derrière une interface (POR-3) ; formats et taille maximale.
