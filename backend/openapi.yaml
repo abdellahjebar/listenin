@@ -1,0 +1,86 @@
+openapi: 3.1.0
+info:
+  title: API ListenIn
+  version: 0.1.0
+  summary: Réseau professionnel pour musiciens.
+  description: |
+    Contrat de l'API de ListenIn, écrit avant le code (ADR 0003 et 0007).
+    L'API valide chaque requête par rapport à ce document ; les tests valident aussi les réponses.
+
+    Toute erreur suit le même format : `{ "error": { "code", "message", "details" } }`.
+  license:
+    name: Propriétaire
+    identifier: LicenseRef-Proprietary
+servers:
+  - url: /api
+    description: Même origine que l'application web
+tags:
+  - name: Exploitation
+    description: Surveillance du service.
+security: []
+paths:
+  /health:
+    get:
+      tags: [Exploitation]
+      operationId: getHealth
+      summary: Vérifier que l'API répond
+      description: Utilisée par la surveillance et par le contrôle de santé de l'image Docker.
+      responses:
+        '200':
+          description: L'API répond.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+        '500':
+          $ref: '#/components/responses/InternalError'
+components:
+  schemas:
+    Health:
+      type: object
+      additionalProperties: false
+      required: [status]
+      properties:
+        status:
+          type: string
+          const: ok
+    Error:
+      description: Format commun à toutes les erreurs (conventions REST de Microsoft).
+      type: object
+      additionalProperties: false
+      required: [error]
+      properties:
+        error:
+          type: object
+          additionalProperties: false
+          required: [code, message]
+          properties:
+            code:
+              description: Code stable, lisible par un programme.
+              type: string
+              examples: [ValidationError]
+            message:
+              description: Message lisible par une personne.
+              type: string
+            details:
+              description: Une entrée par champ en cause.
+              type: array
+              items:
+                $ref: '#/components/schemas/ErrorDetail'
+    ErrorDetail:
+      type: object
+      additionalProperties: false
+      required: [target, message]
+      properties:
+        target:
+          description: Le champ en cause, par exemple `email`.
+          type: string
+        message:
+          type: string
+  responses:
+    InternalError:
+      description: Erreur interne du serveur.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'

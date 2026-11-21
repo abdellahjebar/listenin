@@ -1,0 +1,5 @@
+# Exceptions assumées aux règles de redocly.yaml, chacune avec sa raison.
+openapi.yaml:
+  # /health ne reçoit aucun paramètre : aucune réponse 4XX n'a de sens.
+  operation-4xx-response:
+    - '#/paths/~1health/get/responses'

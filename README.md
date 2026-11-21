@@ -75,6 +75,14 @@ Chaque application (`backend/` et `frontend/`) expose les mêmes commandes :
 
 Spécifiques au backend : `npm run dev` (rechargement automatique), `npm run typecheck`, `npm start` (version compilée).
 
+Contrat d'API ([`backend/openapi.yaml`](backend/openapi.yaml), écrit avant le code, voir l'[ADR 0007](docs/adr/0007-outillage-openapi.md)) :
+
+| Commande | Dossier | Effet |
+|---|---|---|
+| `npm run api:lint` | `backend/` | vérifie le contrat (Redocly, règles strictes) |
+| `npm run api:docs` | `backend/` | génère la documentation dans `dist/api-docs.html`, à ouvrir en local |
+| `npm run api:types` | `frontend/` | régénère les types TypeScript de l'API, à commiter avec le contrat |
+
 Images Docker :
 
 ```bash
@@ -94,7 +102,7 @@ REPORT.md     rapport d'avancement (jalon du cours Technologies Web)
 
 ## Qualité et intégration continue
 
-À chaque pull request et à chaque push sur `main`, la CI GitHub Actions exécute, pour le backend et le frontend : formatage, lint, types (backend), tests, build, audit des dépendances de production. Elle construit aussi les deux images Docker, **sans les publier**.
+À chaque pull request et à chaque push sur `main`, la CI GitHub Actions exécute, pour le backend et le frontend : formatage, lint, types (backend), tests, build, audit des dépendances de production. Elle vérifie aussi le contrat OpenAPI, la conformité des réponses de l'API au contrat (dans les tests) et que les types de l'API du frontend sont à jour. Enfin, elle construit les deux images Docker, **sans les publier**.
 
 Dependabot propose chaque semaine les mises à jour des dépendances npm, des images Docker et des actions GitHub.
 
