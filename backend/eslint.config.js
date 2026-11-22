@@ -4,7 +4,8 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default defineConfig(
-  { ignores: ['dist/', 'coverage/', 'node_modules/'] },
+  // src/api/schema.d.ts : types générés depuis openapi.yaml (npm run api:types).
+  { ignores: ['dist/', 'coverage/', 'node_modules/', 'src/api/schema.d.ts'] },
   js.configs.recommended,
   tseslint.configs.recommendedTypeChecked,
   {

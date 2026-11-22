@@ -2,12 +2,13 @@ import express from 'express';
 import * as OpenApiValidator from 'express-openapi-validator';
 import request from 'supertest';
 import { describe, expect, it } from 'vitest';
-import { createApp, OPENAPI_SPEC_PATH } from '../src/app.js';
+import { OPENAPI_SPEC_PATH } from '../src/app.js';
 import { createLogger } from '../src/logger.js';
 import { errorHandler } from '../src/middleware/errors.js';
+import { createTestApp, TEST_ORIGIN } from './helpers/app.js';
 
 const logger = createLogger({ NODE_ENV: 'test', LOG_LEVEL: 'info' });
-const app = createApp(logger, { validateResponses: true });
+const app = createTestApp();
 
 describe('requêtes hors contrat', () => {
   it('route inconnue : 404 au format commun', async () => {
@@ -27,7 +28,7 @@ describe('requêtes hors contrat', () => {
   });
 
   it('méthode non décrite : 405 avec l’en-tête Allow', async () => {
-    const response = await request(app).delete('/api/health');
+    const response = await request(app).delete('/api/health').set('Origin', TEST_ORIGIN);
 
     expect(response.status).toBe(405);
     expect(response.headers['allow']).toMatch(/GET/);
@@ -37,6 +38,7 @@ describe('requêtes hors contrat', () => {
   it('JSON illisible : 400 InvalidJson', async () => {
     const response = await request(app)
       .post('/api/health')
+      .set('Origin', TEST_ORIGIN)
       .set('Content-Type', 'application/json')
       .send('{ pas du json');
 
