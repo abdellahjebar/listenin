@@ -15,10 +15,57 @@ servers:
   - url: /api
     description: Même origine que l'application web
 tags:
+  - name: Identité
+    description: Comptes et sessions.
   - name: Exploitation
     description: Surveillance du service.
 security: []
 paths:
+  /accounts:
+    post:
+      tags: [Identité]
+      operationId: createAccount
+      summary: S'inscrire
+      description: |
+        Crée un compte et son profil, enregistre l'acceptation des conditions d'utilisation,
+        puis ouvre une session : le membre est connecté (story 1).
+
+        Requête refusée si son en-tête `Origin` n'est pas celui de ListenIn (403), et au-delà
+        de 10 inscriptions par heure depuis la même adresse IP (429).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewAccount'
+      responses:
+        '201':
+          description: Compte créé ; la réponse pose le cookie de session.
+          headers:
+            Set-Cookie:
+              description: |
+                `__Host-session=…; Path=/; HttpOnly; Secure; SameSite=Strict`. Le numéro de session
+                n'est lisible par aucun script de la page (SEC-4).
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '403':
+          $ref: '#/components/responses/ForbiddenOrigin'
+        '409':
+          description: Adresse e-mail déjà utilisée (code `EmailAlreadyUsed`). Risque accepté (ADR 0006).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalError'
   /health:
     get:
       tags: [Exploitation]
@@ -36,6 +83,48 @@ paths:
           $ref: '#/components/responses/InternalError'
 components:
   schemas:
+    NewAccount:
+      type: object
+      additionalProperties: false
+      required: [name, email, password, acceptTerms]
+      properties:
+        name:
+          description: Nom affiché sur le profil.
+          type: string
+          minLength: 1
+          maxLength: 100
+          pattern: \S
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        password:
+          description: |
+            15 caractères au minimum, 128 au maximum, sans règle de composition
+            (NIST SP 800-63B-4, ADR 0006).
+          type: string
+          format: password
+          minLength: 15
+          maxLength: 128
+          writeOnly: true
+        acceptTerms:
+          description: Acceptation des conditions d'utilisation ; seule la valeur `true` est admise.
+          type: boolean
+          const: true
+    Account:
+      type: object
+      additionalProperties: false
+      required: [id, name, email]
+      properties:
+        id:
+          type: string
+          pattern: ^[0-9a-f]{24}$
+        name:
+          type: string
+        email:
+          description: Enregistrée en minuscules.
+          type: string
+          format: email
     Health:
       type: object
       additionalProperties: false
@@ -78,6 +167,29 @@ components:
         message:
           type: string
   responses:
+    ValidationError:
+      description: La requête ne respecte pas le contrat (code `ValidationError` ou `InvalidJson`).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ForbiddenOrigin:
+      description: En-tête `Origin` absent ou étranger à ListenIn (code `ForbiddenOrigin`, SEC-10).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Trop de tentatives (code `TooManyRequests`, SEC-5).
+      headers:
+        Retry-After:
+          description: Nombre de secondes à attendre.
+          schema:
+            type: integer
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
     InternalError:
       description: Erreur interne du serveur.
       content:
