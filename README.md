@@ -29,7 +29,7 @@ Navigateur ──► Frontend (Angular 22) ──► API (Express 5, TypeScript)
 - **Monolithe modulaire** : un seul backend déployable, découpé par domaine (identité, profil, portfolio, découverte et recherche, confiance). Pas de microservices.
 - **Frontend** : composants standalone, Signals, routes chargées par fonctionnalité.
 - **Configuration** par variables d'environnement, validée au démarrage ; aucun secret dans le dépôt.
-- **Données** : MongoDB, fichiers audio compris (GridFS), voir l'[ADR 0005](docs/adr/0005-base-de-donnees-mongodb.md).
+- **Données** : MongoDB, fichiers audio compris (GridFS), voir l'[ADR 0005](docs/adr/0005-base-de-donnees-mongodb.md) ; accès avec Mongoose, voir l'[ADR 0008](docs/adr/0008-acces-mongodb-mongoose.md).
 - **Déploiement** : une image Docker par application. La chaîne de livraison viendra plus tard (voir [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)).
 
 Schémas C4 et décisions : [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) et [docs/adr/](docs/adr/).
@@ -37,11 +37,19 @@ Schémas C4 et décisions : [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) et [doc
 ## Prérequis
 
 - **Node.js 24** ou plus récent, avec npm
-- **Docker** (facultatif) pour construire les images
+- **MongoDB 8** pour lancer l'API, le plus simple étant **Docker** (aussi utilisé pour construire les images). Les tests n'en ont pas besoin : ils démarrent leur propre base en mémoire.
 
 ## Démarrage rapide
 
-Dans un premier terminal, l'API :
+Une base MongoDB locale, une seule fois :
+
+```bash
+docker run -d --name listenin-mongo -p 27017:27017 mongo:8
+```
+
+Les fois suivantes : `docker start listenin-mongo`.
+
+Dans un premier terminal, l'API (elle refuse de démarrer si la base est injoignable) :
 
 ```bash
 cd backend
@@ -73,7 +81,7 @@ Chaque application (`backend/` et `frontend/`) expose les mêmes commandes :
 | `npm test` | tests (Vitest) |
 | `npm run build` | compilation de production |
 
-Spécifiques au backend : `npm run dev` (rechargement automatique), `npm run typecheck`, `npm start` (version compilée).
+Spécifiques au backend : `npm run dev` (rechargement automatique), `npm run typecheck`, `npm start` (version compilée). Le premier `npm test` du backend télécharge le binaire MongoDB des tests (environ 100 Mo), puis le réutilise.
 
 Contrat d'API ([`backend/openapi.yaml`](backend/openapi.yaml), écrit avant le code, voir l'[ADR 0007](docs/adr/0007-outillage-openapi.md)) :
 
