@@ -1,0 +1,3 @@
+# Règles de vérification du contrat (ADR 0007) : un avertissement fait échouer la CI.
+extends:
+  - recommended-strict

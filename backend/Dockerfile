@@ -14,6 +14,8 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev && npm cache clean --force
 COPY --from=build /app/dist ./dist
+# Le contrat est lu au démarrage : chaque requête est validée par rapport à lui.
+COPY openapi.yaml ./
 USER node
 EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s \
