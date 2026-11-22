@@ -45,8 +45,8 @@ Option retenue : **A, session côté serveur**, parce qu'elle seule satisfait à
 **Hachage** : **Argon2id**, au minimum 19 Mio de mémoire, 2 itérations, 1 fil (recommandation de l'OWASP). Le choix entre `crypto.argon2()` de Node (disponible depuis la version 24.7) et la bibliothèque `argon2` se fait à la première tranche, selon la stabilité de la version de Node.
 
 **Politique de mot de passe** (NIST SP 800-63B-4, mot de passe seul facteur)
-- **15 caractères minimum**, 64 acceptés au moins, aucune règle de composition.
-- Refus des mots de passe courants (liste locale).
+- **15 caractères minimum**, **128 au maximum** (la norme exige d'en accepter au moins 64 ; le plafond borne le coût du hachage), aucune règle de composition.
+- ~~Refus des mots de passe courants (liste locale).~~ Retiré le 2026-11-22, voir « Modifications ».
 - Aucun changement imposé à intervalle régulier.
 
 **Limitation des tentatives**
@@ -65,9 +65,14 @@ Option retenue : **A, session côté serveur**, parce qu'elle seule satisfait à
 * Mauvais : ça s'écarte du cours, qui montre un jeton géré par l'application.
 * Mauvais : 15 caractères minimum peut surprendre des utilisateurs habitués à moins.
 
+### Modifications
+
+- **2026-11-22 : pas de liste de mots de passe courants.** Décision du porteur du projet à la première tranche. C'est un **écart accepté** à la norme NIST SP 800-63B-4, qui exige cette vérification ; le minimum de 15 caractères reste la protection principale. Le cookie de session s'appelle `__Host-session` : le préfixe impose `Secure`, `Path=/` et aucun domaine.
+
 ### Déclencheurs de révision
 
 - Arrivée du service d'e-mails (mot de passe oublié) : passer le message d'inscription à un message identique suivi d'un e-mail.
 - Ajout d'un second facteur : la norme autorise alors 8 caractères minimum.
+- Des comptes compromis par des mots de passe courants : ajouter la liste de refus.
 - Plusieurs instances de l'API : déplacer les compteurs de tentatives dans MongoDB.
 - Un client hors navigateur (application mobile, API publique) : réévaluer les jetons.

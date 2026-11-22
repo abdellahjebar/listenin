@@ -39,6 +39,14 @@ jobs:
       - run: npm run lint
       - name: Vérifier le contrat OpenAPI
         run: npm run api:lint
+      - name: Vérifier que les types de l'API sont à jour
+        run: |
+          npm run api:types
+          if [ -n "$(git status --porcelain -- src/api)" ]; then
+            echo "::error::Types de l'API périmés : lancer « npm run api:types » dans backend/ et commiter le résultat."
+            git diff -- src/api
+            exit 1
+          fi
       - run: npm run typecheck
       - run: npm test
       - run: npm run build

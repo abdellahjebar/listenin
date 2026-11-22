@@ -20,7 +20,7 @@ Chaque exigence a une **vérification**. Une exigence qu'on ne sait pas vérifie
 | SEC-8 | Aucun secret dans le dépôt ; aucune dépendance de production avec une faille **haute** ou **critique** connue | CI : `npm audit` (en place) |
 | SEC-9 | Les journaux ne contiennent ni mot de passe, ni en-tête `Authorization`, ni cookie | test du masquage (en place) + revue |
 | SEC-10 | Toute requête qui modifie des données est refusée si son en-tête `Origin` n'est pas celui de ListenIn (CSRF) | test |
-| SEC-11 | Un mot de passe de moins de 15 caractères ou présent dans la liste des mots de passe courants est refusé | tests |
+| SEC-11 | Un mot de passe de moins de 15 ou de plus de 128 caractères est refusé, sans règle de composition (ADR 0006) | tests |
 
 ## Fiabilité
 
