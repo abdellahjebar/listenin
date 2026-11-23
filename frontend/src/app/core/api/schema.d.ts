@@ -28,6 +28,56 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/sessions': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Se connecter
+     * @description Ouvre une nouvelle session et supprime celle que le navigateur avait peut-être déjà
+     *     (contre la fixation de session). Une adresse inconnue et un mauvais mot de passe
+     *     reçoivent exactement la même réponse 401 (F4).
+     *
+     *     Limites : 5 échecs en 15 minutes par adresse IP et adresse e-mail, 100 tentatives en
+     *     15 minutes par adresse IP ; au-delà, 429.
+     */
+    post: operations['createSession'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/sessions/current': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Voir le membre connecté
+     * @description Sert à l'application web pour savoir si le navigateur a une session active.
+     */
+    get: operations['getCurrentSession'];
+    put?: never;
+    post?: never;
+    /**
+     * Se déconnecter
+     * @description Détruit la session côté serveur et efface le cookie. Répond 204 même sans session
+     *     valide : l'opération peut être répétée sans risque.
+     */
+    delete: operations['deleteCurrentSession'];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/health': {
     parameters: {
       query?: never;
@@ -52,6 +102,11 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
   schemas: {
+    Credentials: {
+      email: string;
+      /** Format: password */
+      password: string;
+    };
     NewAccount: {
       /** @description Nom affiché sur le profil. */
       name: string;
@@ -112,6 +167,15 @@ export interface components {
         'application/json': components['schemas']['Error'];
       };
     };
+    /** @description Connexion requise ou session expirée (code `Unauthenticated`). */
+    Unauthenticated: {
+      headers: {
+        [name: string]: unknown;
+      };
+      content: {
+        'application/json': components['schemas']['Error'];
+      };
+    };
     /** @description En-tête `Origin` absent ou étranger à ListenIn (code `ForbiddenOrigin`, SEC-10). */
     ForbiddenOrigin: {
       headers: {
@@ -144,7 +208,13 @@ export interface components {
   };
   parameters: never;
   requestBodies: never;
-  headers: never;
+  headers: {
+    /**
+     * @description `__Host-session=…; Path=/; HttpOnly; Secure; SameSite=Strict`. Le numéro de session
+     *     n'est lisible par aucun script de la page (SEC-4).
+     */
+    SessionCookie: string;
+  };
   pathItems: never;
 }
 export type $defs = Record<string, never>;
@@ -165,11 +235,7 @@ export interface operations {
       /** @description Compte créé ; la réponse pose le cookie de session. */
       201: {
         headers: {
-          /**
-           * @description `__Host-session=…; Path=/; HttpOnly; Secure; SameSite=Strict`. Le numéro de session
-           *     n'est lisible par aucun script de la page (SEC-4).
-           */
-          'Set-Cookie'?: string;
+          'Set-Cookie': components['headers']['SessionCookie'];
           [name: string]: unknown;
         };
         content: {
@@ -188,6 +254,88 @@ export interface operations {
         };
       };
       429: components['responses']['TooManyRequests'];
+      500: components['responses']['InternalError'];
+    };
+  };
+  createSession: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['Credentials'];
+      };
+    };
+    responses: {
+      /** @description Connecté ; la réponse pose un nouveau cookie de session. */
+      201: {
+        headers: {
+          'Set-Cookie': components['headers']['SessionCookie'];
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['Account'];
+        };
+      };
+      400: components['responses']['ValidationError'];
+      /** @description Adresse e-mail ou mot de passe incorrect (code `InvalidCredentials`). */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['Error'];
+        };
+      };
+      403: components['responses']['ForbiddenOrigin'];
+      429: components['responses']['TooManyRequests'];
+      500: components['responses']['InternalError'];
+    };
+  };
+  getCurrentSession: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Le membre connecté. */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['Account'];
+        };
+      };
+      401: components['responses']['Unauthenticated'];
+      500: components['responses']['InternalError'];
+    };
+  };
+  deleteCurrentSession: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Déconnecté. */
+      204: {
+        headers: {
+          /** @description Efface le cookie `__Host-session`. */
+          'Set-Cookie'?: string;
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      403: components['responses']['ForbiddenOrigin'];
       500: components['responses']['InternalError'];
     };
   };
