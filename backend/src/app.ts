@@ -1,4 +1,5 @@
 import { fileURLToPath } from 'node:url';
+import cookieParser from 'cookie-parser';
 import express, { type Express } from 'express';
 import * as OpenApiValidator from 'express-openapi-validator';
 import helmet from 'helmet';
@@ -6,7 +7,7 @@ import type { Logger } from 'pino';
 import { pinoHttp } from 'pino-http';
 import { errorHandler, notFound } from './middleware/errors.js';
 import { requireSameOrigin } from './middleware/origin.js';
-import { createAccountsRouter } from './modules/identity/index.js';
+import { createAccountsRouter, createSessionsRouter } from './modules/identity/index.js';
 import { healthRouter } from './routes/health.js';
 
 /** Le contrat est à la racine de backend/ : un niveau au-dessus de src/ comme de dist/. */
@@ -27,6 +28,7 @@ export function createApp(logger: Logger, options: AppOptions): Express {
   app.use(pinoHttp({ logger }));
   app.use(requireSameOrigin(options.appOrigin));
   app.use(express.json({ limit: '100kb' }));
+  app.use(cookieParser());
 
   // Toute requête est comparée au contrat avant d'atteindre une route : hors contrat, 400 (SEC-3).
   app.use(
@@ -34,11 +36,14 @@ export function createApp(logger: Logger, options: AppOptions): Express {
       apiSpec: OPENAPI_SPEC_PATH,
       validateRequests: true,
       validateResponses: options.validateResponses ?? false,
+      // L'authentification est vérifiée par requireSession, qui répond au format commun.
+      validateSecurity: false,
     }),
   );
 
   app.use('/api/health', healthRouter);
   app.use('/api/accounts', createAccountsRouter());
+  app.use('/api/sessions', createSessionsRouter());
 
   app.use(notFound);
   app.use(errorHandler);
