@@ -15,9 +15,12 @@ try {
   process.exit(1);
 }
 
-const server: Server = createApp(logger).listen(config.PORT, () => {
-  logger.info({ port: config.PORT }, 'API démarrée');
-});
+const server: Server = createApp(logger, { appOrigin: config.APP_ORIGIN }).listen(
+  config.PORT,
+  () => {
+    logger.info({ port: config.PORT }, 'API démarrée');
+  },
+);
 
 server.on('error', (error) => {
   logger.error({ err: error }, "Impossible d'écouter sur le port");

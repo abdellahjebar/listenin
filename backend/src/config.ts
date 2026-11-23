@@ -5,6 +5,9 @@ const schema = z.object({
   PORT: z.coerce.number().int().min(1).max(65535).default(3000),
   LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent']).default('info'),
   // Obligatoire, sans valeur par défaut : l'adresse peut contenir un mot de passe (jamais journalisée).
+  // Adresse de l'application web, attendue dans l'en-tête Origin des requêtes qui modifient
+  // des données (SEC-10). Sans chemin ni barre finale : https://listenin.example
+  APP_ORIGIN: z.string().regex(/^https?:\/\/[^/]+$/, 'doit être une origine, sans chemin'),
   MONGODB_URI: z
     .string()
     .regex(/^mongodb(\+srv)?:\/\//, 'doit commencer par mongodb:// ou mongodb+srv://'),

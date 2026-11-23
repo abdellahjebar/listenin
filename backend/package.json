@@ -17,12 +17,14 @@
     "format:check": "prettier --check .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "api:lint": "redocly lint openapi.yaml",
-    "api:docs": "redocly build-docs openapi.yaml --output dist/api-docs.html"
+    "api:lint": "redocly lint openapi.yaml --config redocly.lint.yaml",
+    "api:docs": "redocly build-docs openapi.yaml --config redocly.lint.yaml --output dist/api-docs.html",
+    "api:types": "openapi-typescript openapi.yaml --output src/api/schema.d.ts && prettier --write src/api/schema.d.ts"
   },
   "dependencies": {
     "express": "^5.3.0",
     "express-openapi-validator": "^5.6.2",
+    "express-rate-limit": "^8.7.5",
     "helmet": "^8.3.0",
     "mongoose": "^9.12.3",
     "pino": "^10.4.0",
@@ -38,6 +40,7 @@
     "eslint": "^10.14.0",
     "globals": "^17.14.0",
     "mongodb-memory-server": "^11.4.0",
+    "openapi-typescript": "^7.13.0",
     "prettier": "^3.10.1",
     "supertest": "^7.3.2",
     "tsx": "^4.23.15",
@@ -48,6 +51,11 @@
   "config": {
     "mongodbMemoryServer": {
       "version": "8.2.6"
+    }
+  },
+  "overrides": {
+    "openapi-typescript": {
+      "typescript": "$typescript"
     }
   }
 }

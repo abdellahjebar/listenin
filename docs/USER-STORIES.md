@@ -12,7 +12,7 @@ Référence des critères d'acceptation. Le cadrage est dans [PRODUCT.md](PRODUC
 - Étant donné un visiteur, quand il n'accepte pas les conditions d'utilisation, alors l'inscription est refusée.
 - Étant donné une adresse e-mail déjà utilisée, quand un visiteur s'inscrit avec elle, alors l'inscription est refusée avec un message clair.
 - Étant donné un champ invalide, quand le visiteur envoie le formulaire, alors le champ en erreur est indiqué et aucun compte n'est créé.
-- Étant donné un mot de passe de moins de 15 caractères ou trop courant, quand le visiteur s'inscrit, alors l'inscription est refusée avec la règle expliquée.
+- Étant donné un mot de passe de moins de 15 caractères, quand le visiteur s'inscrit, alors l'inscription est refusée avec la règle expliquée.
 - Étant donné une inscription réussie, alors l'acceptation des conditions est enregistrée avec sa date et la version du texte.
 
 ### 2. Se connecter et se déconnecter

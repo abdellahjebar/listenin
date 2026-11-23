@@ -9,6 +9,21 @@ export interface ErrorBody {
   };
 }
 
+/**
+ * Erreur prévue, levée par le code de l'API (règle métier, protection) : son statut, son code et
+ * son message sont renvoyés tels quels au client.
+ */
+export class ApiError extends Error {
+  constructor(
+    readonly status: number,
+    readonly code: string,
+    message: string,
+  ) {
+    super(message);
+    this.name = 'ApiError';
+  }
+}
+
 const NOT_FOUND = { code: 'NotFound', message: 'Ressource inconnue' };
 
 /** Erreurs client connues : statut HTTP vers code stable et message. */
@@ -61,6 +76,11 @@ export const notFound: RequestHandler = (_req, res) => {
 
 // Express reconnaît un gestionnaire d'erreurs à ses quatre paramètres.
 export const errorHandler: ErrorRequestHandler = (error, req, res, _next) => {
+  if (error instanceof ApiError) {
+    send(res, error.status, { error: { code: error.code, message: error.message } });
+    return;
+  }
+
   if (isClientError(error)) {
     if (error.status === 400 && error.type === 'entity.parse.failed') {
       send(res, 400, {

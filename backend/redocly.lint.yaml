@@ -1,3 +1,4 @@
 # Règles de vérification du contrat (ADR 0007) : un avertissement fait échouer la CI.
+# Nom non standard : openapi-typescript lirait un redocly.yaml et refuserait de générer les types.
 extends:
   - recommended-strict

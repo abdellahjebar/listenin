@@ -4,7 +4,7 @@ Réseau professionnel pour musiciens : un **portfolio audio**, des **crédits**,
 
 Un musicien y présente ce qu'il a joué, et on l'**écoute** avant de l'engager.
 
-> **Statut : socle technique.** Le dépôt contient une application Angular vide et une API qui répond sur `/api/health`, avec la qualité automatisée (lint, tests, CI, images Docker). Les fonctionnalités arrivent par tranches, voir [la feuille de route](#feuille-de-route). Le produit n'est volontairement **pas déployé** pour l'instant.
+> **Statut : tranche « identité » en cours.** L'API permet de s'inscrire (`POST /api/accounts`) ; l'application Angular est encore vide. La qualité est automatisée (lint, tests, contrat OpenAPI, CI, images Docker). Les fonctionnalités arrivent par tranches, voir [la feuille de route](#feuille-de-route). Le produit n'est volontairement **pas déployé** pour l'instant.
 
 ## Sommaire
 
@@ -89,7 +89,7 @@ Contrat d'API ([`backend/openapi.yaml`](backend/openapi.yaml), écrit avant le c
 |---|---|---|
 | `npm run api:lint` | `backend/` | vérifie le contrat (Redocly, règles strictes) |
 | `npm run api:docs` | `backend/` | génère la documentation dans `dist/api-docs.html`, à ouvrir en local |
-| `npm run api:types` | `frontend/` | régénère les types TypeScript de l'API, à commiter avec le contrat |
+| `npm run api:types` | `backend/` et `frontend/` | régénère les types TypeScript de l'API, à commiter avec le contrat |
 
 Images Docker :
 

@@ -4,6 +4,30 @@
  */
 
 export interface paths {
+  '/accounts': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * S'inscrire
+     * @description Crée un compte et son profil, enregistre l'acceptation des conditions d'utilisation,
+     *     puis ouvre une session : le membre est connecté (story 1).
+     *
+     *     Requête refusée si son en-tête `Origin` n'est pas celui de ListenIn (403), et au-delà
+     *     de 10 inscriptions par heure depuis la même adresse IP (429).
+     */
+    post: operations['createAccount'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/health': {
     parameters: {
       query?: never;
@@ -28,6 +52,32 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
   schemas: {
+    NewAccount: {
+      /** @description Nom affiché sur le profil. */
+      name: string;
+      /** Format: email */
+      email: string;
+      /**
+       * Format: password
+       * @description 15 caractères au minimum, 128 au maximum, sans règle de composition
+       *     (NIST SP 800-63B-4, ADR 0006).
+       */
+      password: string;
+      /**
+       * @description Acceptation des conditions d'utilisation ; seule la valeur `true` est admise.
+       * @constant
+       */
+      acceptTerms: true;
+    };
+    Account: {
+      id: string;
+      name: string;
+      /**
+       * Format: email
+       * @description Enregistrée en minuscules.
+       */
+      email: string;
+    };
     Health: {
       /** @constant */
       status: 'ok';
@@ -53,6 +103,35 @@ export interface components {
     };
   };
   responses: {
+    /** @description La requête ne respecte pas le contrat (code `ValidationError` ou `InvalidJson`). */
+    ValidationError: {
+      headers: {
+        [name: string]: unknown;
+      };
+      content: {
+        'application/json': components['schemas']['Error'];
+      };
+    };
+    /** @description En-tête `Origin` absent ou étranger à ListenIn (code `ForbiddenOrigin`, SEC-10). */
+    ForbiddenOrigin: {
+      headers: {
+        [name: string]: unknown;
+      };
+      content: {
+        'application/json': components['schemas']['Error'];
+      };
+    };
+    /** @description Trop de tentatives (code `TooManyRequests`, SEC-5). */
+    TooManyRequests: {
+      headers: {
+        /** @description Nombre de secondes à attendre. */
+        'Retry-After'?: number;
+        [name: string]: unknown;
+      };
+      content: {
+        'application/json': components['schemas']['Error'];
+      };
+    };
     /** @description Erreur interne du serveur. */
     InternalError: {
       headers: {
@@ -70,6 +149,48 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+  createAccount: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['NewAccount'];
+      };
+    };
+    responses: {
+      /** @description Compte créé ; la réponse pose le cookie de session. */
+      201: {
+        headers: {
+          /**
+           * @description `__Host-session=…; Path=/; HttpOnly; Secure; SameSite=Strict`. Le numéro de session
+           *     n'est lisible par aucun script de la page (SEC-4).
+           */
+          'Set-Cookie'?: string;
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['Account'];
+        };
+      };
+      400: components['responses']['ValidationError'];
+      403: components['responses']['ForbiddenOrigin'];
+      /** @description Adresse e-mail déjà utilisée (code `EmailAlreadyUsed`). Risque accepté (ADR 0006). */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['Error'];
+        };
+      };
+      429: components['responses']['TooManyRequests'];
+      500: components['responses']['InternalError'];
+    };
+  };
   getHealth: {
     parameters: {
       query?: never;
