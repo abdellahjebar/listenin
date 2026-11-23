@@ -8,3 +8,9 @@ export async function createProfile(
 ): Promise<void> {
   await ProfileModel.create({ accountId, name });
 }
+
+/** Le nom affiché d'un membre, ou null si son profil n'existe pas. */
+export async function findProfileName(accountId: mongoose.Types.ObjectId): Promise<string | null> {
+  const profile = await ProfileModel.findOne({ accountId }, { name: 1 }).lean();
+  return profile?.name ?? null;
+}

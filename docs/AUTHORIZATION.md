@@ -12,8 +12,9 @@ Qui peut faire quoi au palier 1. Chaque ligne devient au moins un **test d'API**
 | Modification ou suppression de la piste d'un autre, même visible | **404**, pour une règle unique sur les pistes des autres |
 | Données invalides | **400**, avec le champ en erreur |
 | Trop de tentatives (connexion, inscription) | **429**, message neutre (ADR 0006) |
+| Requête qui modifie des données sans l'en-tête `Origin` de ListenIn (requête forgée, SEC-10) | **403** |
 
-Une seule règle à retenir : **ce qu'on n'a pas le droit de toucher n'existe pas pour nous.** On n'utilise pas le code 403 au palier 1.
+Une seule règle à retenir : **ce qu'on n'a pas le droit de toucher n'existe pas pour nous.** Le code 403 ne sert donc **jamais** à refuser l'accès à une ressource ; il est réservé aux requêtes d'une origine étrangère, refusées avant tout examen des droits.
 
 ## Matrice
 

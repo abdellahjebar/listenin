@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import type { components } from '../../api/schema.js';
-import { limitPerIp } from '../../middleware/rate-limit.js';
+import { limitRequests } from '../../middleware/rate-limit.js';
 import { registerAccount } from './accounts.service.js';
 import { setSessionCookie } from './sessions.js';
 
@@ -12,7 +12,7 @@ export function createAccountsRouter(): Router {
   const router = Router();
 
   // Inscription : 10 par heure par adresse IP (ADR 0006).
-  router.post('/', limitPerIp({ limit: 10, windowMs: 60 * 60 * 1000 }), async (req, res) => {
+  router.post('/', limitRequests({ limit: 10, windowMs: 60 * 60 * 1000 }), async (req, res) => {
     // Le corps a déjà été validé par le contrat (express-openapi-validator).
     const { name, email, password } = req.body as NewAccount;
     const registered = await registerAccount({ name, email, password }, req.log);

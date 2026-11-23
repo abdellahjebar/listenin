@@ -43,11 +43,7 @@ paths:
           description: Compte créé ; la réponse pose le cookie de session.
           headers:
             Set-Cookie:
-              description: |
-                `__Host-session=…; Path=/; HttpOnly; Secure; SameSite=Strict`. Le numéro de session
-                n'est lisible par aucun script de la page (SEC-4).
-              schema:
-                type: string
+              $ref: '#/components/headers/SessionCookie'
           content:
             application/json:
               schema:
@@ -66,6 +62,86 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalError'
+  /sessions:
+    post:
+      tags: [Identité]
+      operationId: createSession
+      summary: Se connecter
+      description: |
+        Ouvre une nouvelle session et supprime celle que le navigateur avait peut-être déjà
+        (contre la fixation de session). Une adresse inconnue et un mauvais mot de passe
+        reçoivent exactement la même réponse 401 (F4).
+
+        Limites : 5 échecs en 15 minutes par adresse IP et adresse e-mail, 100 tentatives en
+        15 minutes par adresse IP ; au-delà, 429.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credentials'
+      responses:
+        '201':
+          description: Connecté ; la réponse pose un nouveau cookie de session.
+          headers:
+            Set-Cookie:
+              $ref: '#/components/headers/SessionCookie'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          description: Adresse e-mail ou mot de passe incorrect (code `InvalidCredentials`).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          $ref: '#/components/responses/ForbiddenOrigin'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalError'
+  /sessions/current:
+    get:
+      tags: [Identité]
+      operationId: getCurrentSession
+      summary: Voir le membre connecté
+      description: Sert à l'application web pour savoir si le navigateur a une session active.
+      security:
+        - sessionCookie: []
+      responses:
+        '200':
+          description: Le membre connecté.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '500':
+          $ref: '#/components/responses/InternalError'
+    delete:
+      tags: [Identité]
+      operationId: deleteCurrentSession
+      summary: Se déconnecter
+      description: |
+        Détruit la session côté serveur et efface le cookie. Répond 204 même sans session
+        valide : l'opération peut être répétée sans risque.
+      responses:
+        '204':
+          description: Déconnecté.
+          headers:
+            Set-Cookie:
+              description: Efface le cookie `__Host-session`.
+              schema:
+                type: string
+        '403':
+          $ref: '#/components/responses/ForbiddenOrigin'
+        '500':
+          $ref: '#/components/responses/InternalError'
   /health:
     get:
       tags: [Exploitation]
@@ -82,7 +158,36 @@ paths:
         '500':
           $ref: '#/components/responses/InternalError'
 components:
+  securitySchemes:
+    sessionCookie:
+      description: |
+        Session côté serveur (ADR 0006). Le numéro est posé par l'API dans un cookie `HttpOnly` :
+        l'application web ne le manipule jamais, le navigateur l'envoie seul.
+      type: apiKey
+      in: cookie
+      name: __Host-session
+  headers:
+    SessionCookie:
+      description: |
+        `__Host-session=…; Path=/; HttpOnly; Secure; SameSite=Strict`. Le numéro de session
+        n'est lisible par aucun script de la page (SEC-4).
+      schema:
+        type: string
   schemas:
+    Credentials:
+      type: object
+      additionalProperties: false
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          maxLength: 254
+        password:
+          type: string
+          format: password
+          minLength: 1
+          maxLength: 128
+          writeOnly: true
     NewAccount:
       type: object
       additionalProperties: false
@@ -169,6 +274,12 @@ components:
   responses:
     ValidationError:
       description: La requête ne respecte pas le contrat (code `ValidationError` ou `InvalidJson`).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthenticated:
+      description: Connexion requise ou session expirée (code `Unauthenticated`).
       content:
         application/json:
           schema:
