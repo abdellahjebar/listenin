@@ -22,7 +22,7 @@ Un composant n'est **installé** que dans la pull request de l'écran qui l'util
 | Inscription | bloc `signup-two-column` ; Field, Input, Checkbox, Button, Spinner | fait (v0.2.0) |
 | Connexion | bloc `login-two-column` ; Field, Input, Button, Spinner | fait (v0.2.0) |
 | Coquille de l'application connectée | barre de navigation ; **Avatar** (initiales) + **Dropdown Menu** : Mon profil, Modifier mon profil, Se déconnecter | tranche Profil (#66) |
-| Modifier mon profil | **Dialog** (Sheet si le formulaire déborde, mesuré) ; Field, Input, Combobox, **Textarea**, **Sonner**, **Skeleton** | tranche Profil (#66) |
+| Modifier mon profil | **Dialog** (Sheet si le formulaire déborde, mesuré) ; Field, Input, **Combobox multiple avec recherche pendant la frappe** pour les instruments et les genres (Autocomplete si un seul choix), **Textarea**, **Sonner**, **Skeleton** | tranche Profil (#66) |
 | Complétez votre profil | page entière après l'inscription, mêmes champs, bouton « Plus tard » | tranche Profil (#66) |
 | Profil d'un musicien | Avatar, Badge, **Skeleton**, état « introuvable », **Empty** sans bouton si aucune piste partagée (rien ne révèle les pistes privées, F1) | tranche Profil (#67) |
 | Mon portfolio | liste de pistes, **Empty** (« Aucune piste pour l'instant », bouton « Déposer une piste ») | tranche Portfolio |

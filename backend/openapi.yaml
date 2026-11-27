@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: API ListenIn
-  version: 0.1.0
+  version: 0.2.0
   summary: Réseau professionnel pour musiciens.
   description: |
     Contrat de l'API de ListenIn, écrit avant le code (ADR 0003 et 0007).
@@ -17,6 +17,8 @@ servers:
 tags:
   - name: Identité
     description: Comptes et sessions.
+  - name: Profil
+    description: Ce qu'un musicien dit de lui, visible des membres.
   - name: Exploitation
     description: Surveillance du service.
 security: []
@@ -142,6 +144,93 @@ paths:
           $ref: '#/components/responses/ForbiddenOrigin'
         '500':
           $ref: '#/components/responses/InternalError'
+  /profiles/me:
+    get:
+      tags: [Profil]
+      operationId: getMyProfile
+      summary: Voir mon profil
+      description: Le profil du membre connecté, avec son contact.
+      security:
+        - sessionCookie: []
+      responses:
+        '200':
+          description: Mon profil.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '404':
+          description: |
+            Profil absent (code `ProfileMissing`), possible si le serveur s'est arrêté pendant
+            l'inscription : l'application propose le formulaire, et `PUT` le crée.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          $ref: '#/components/responses/InternalError'
+    put:
+      tags: [Profil]
+      operationId: updateMyProfile
+      summary: Enregistrer mon profil
+      description: |
+        Remplace les informations de mon profil, ou le crée s'il manque. Il n'existe aucune route
+        pour modifier le profil d'un autre membre (A4). `contact: null` retire le contact (A5).
+      security:
+        - sessionCookie: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProfileUpdate'
+      responses:
+        '200':
+          description: Profil enregistré.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/ForbiddenOrigin'
+        '500':
+          $ref: '#/components/responses/InternalError'
+  /profiles/{memberId}:
+    get:
+      tags: [Profil]
+      operationId: getProfile
+      summary: Consulter le profil d'un musicien
+      description: Réservé aux membres connectés, contact compris (A6, A7).
+      security:
+        - sessionCookie: []
+      parameters:
+        - name: memberId
+          in: path
+          required: true
+          description: Identifiant du membre, celui que renvoie `/sessions/current`.
+          schema:
+            $ref: '#/components/schemas/MemberId'
+      responses:
+        '200':
+          description: Le profil du musicien.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
   /health:
     get:
       tags: [Exploitation]
@@ -174,6 +263,158 @@ components:
       schema:
         type: string
   schemas:
+    MemberId:
+      type: string
+      pattern: '^[0-9a-f]{24}$'
+    Instrument:
+      description: |
+        Liste fermée (ADR 0011). Codes stables ; les libellés français sont dans l'application.
+        Ajouter un code est une version mineure du contrat ; en retirer un, une version majeure.
+      type: string
+      enum:
+        # Voix
+        - lead-vocals
+        - backing-vocals
+        - mc
+        - beatbox
+        # Cordes
+        - acoustic-guitar
+        - electric-guitar
+        - classical-guitar
+        - bass-guitar
+        - double-bass
+        - violin
+        - viola
+        - cello
+        - harp
+        - ukulele
+        - banjo
+        - mandolin
+        - oud
+        # Claviers
+        - piano
+        - keyboard
+        - organ
+        - synthesizer
+        - accordion
+        # Percussions
+        - drums
+        - percussion
+        - cajon
+        - djembe
+        - vibraphone
+        # Vents
+        - saxophone
+        - trumpet
+        - trombone
+        - french-horn
+        - tuba
+        - flute
+        - clarinet
+        - harmonica
+        # Création et son
+        - composition
+        - beatmaking
+        - production
+        - dj
+        - sound-engineering
+    Genre:
+      description: Liste fermée (ADR 0011), mêmes règles que `Instrument`.
+      type: string
+      enum:
+        - rock
+        - pop
+        - indie
+        - metal
+        - punk
+        - jazz
+        - blues
+        - funk
+        - soul
+        - rnb
+        - gospel
+        - hip-hop
+        - electronic
+        - house
+        - techno
+        - reggae
+        - afrobeats
+        - latin
+        - rai
+        - world
+        - folk
+        - country
+        - chanson
+        - classical
+        - film-score
+    Contact:
+      description: Un lien `https://` ou une adresse e-mail.
+      type: string
+      maxLength: 254
+      anyOf:
+        - format: uri
+          pattern: '^https://'
+        - format: email
+    ProfileUpdate:
+      type: object
+      additionalProperties: false
+      required: [name, instruments, genres, city, bio, contact]
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+          pattern: '\S'
+        instruments:
+          type: array
+          maxItems: 10
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/Instrument'
+        genres:
+          type: array
+          maxItems: 10
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/Genre'
+        city:
+          description: Saisie libre ; chaîne vide si non renseignée.
+          type: string
+          maxLength: 100
+        bio:
+          description: Présentation ; chaîne vide si non renseignée.
+          type: string
+          maxLength: 1000
+        contact:
+          description: '`null` : aucun contact (A5).'
+          oneOf:
+            - $ref: '#/components/schemas/Contact'
+            - type: 'null'
+    Profile:
+      type: object
+      additionalProperties: false
+      required: [memberId, name, instruments, genres, city, bio, contact]
+      properties:
+        memberId:
+          $ref: '#/components/schemas/MemberId'
+        name:
+          type: string
+        instruments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Instrument'
+        genres:
+          type: array
+          items:
+            $ref: '#/components/schemas/Genre'
+        city:
+          type: string
+        bio:
+          type: string
+        contact:
+          oneOf:
+            - $ref: '#/components/schemas/Contact'
+            - type: 'null'
     Credentials:
       type: object
       additionalProperties: false
@@ -274,6 +515,12 @@ components:
   responses:
     ValidationError:
       description: La requête ne respecte pas le contrat (code `ValidationError` ou `InvalidJson`).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Ressource inconnue (code `NotFound`).
       content:
         application/json:
           schema:
