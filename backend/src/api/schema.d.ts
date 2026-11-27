@@ -78,6 +78,51 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/profiles/me': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Voir mon profil
+     * @description Le profil du membre connecté, avec son contact.
+     */
+    get: operations['getMyProfile'];
+    /**
+     * Enregistrer mon profil
+     * @description Remplace les informations de mon profil, ou le crée s'il manque. Il n'existe aucune route
+     *     pour modifier le profil d'un autre membre (A4). `contact: null` retire le contact (A5).
+     */
+    put: operations['updateMyProfile'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/profiles/{memberId}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Consulter le profil d'un musicien
+     * @description Réservé aux membres connectés, contact compris (A6, A7).
+     */
+    get: operations['getProfile'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/health': {
     parameters: {
       query?: never;
@@ -102,6 +147,105 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
   schemas: {
+    MemberId: string;
+    /**
+     * @description Liste fermée (ADR 0011). Codes stables ; les libellés français sont dans l'application.
+     *     Ajouter un code est une version mineure du contrat ; en retirer un, une version majeure.
+     * @enum {string}
+     */
+    Instrument:
+      | 'lead-vocals'
+      | 'backing-vocals'
+      | 'mc'
+      | 'beatbox'
+      | 'acoustic-guitar'
+      | 'electric-guitar'
+      | 'classical-guitar'
+      | 'bass-guitar'
+      | 'double-bass'
+      | 'violin'
+      | 'viola'
+      | 'cello'
+      | 'harp'
+      | 'ukulele'
+      | 'banjo'
+      | 'mandolin'
+      | 'oud'
+      | 'piano'
+      | 'keyboard'
+      | 'organ'
+      | 'synthesizer'
+      | 'accordion'
+      | 'drums'
+      | 'percussion'
+      | 'cajon'
+      | 'djembe'
+      | 'vibraphone'
+      | 'saxophone'
+      | 'trumpet'
+      | 'trombone'
+      | 'french-horn'
+      | 'tuba'
+      | 'flute'
+      | 'clarinet'
+      | 'harmonica'
+      | 'composition'
+      | 'beatmaking'
+      | 'production'
+      | 'dj'
+      | 'sound-engineering';
+    /**
+     * @description Liste fermée (ADR 0011), mêmes règles que `Instrument`.
+     * @enum {string}
+     */
+    Genre:
+      | 'rock'
+      | 'pop'
+      | 'indie'
+      | 'metal'
+      | 'punk'
+      | 'jazz'
+      | 'blues'
+      | 'funk'
+      | 'soul'
+      | 'rnb'
+      | 'gospel'
+      | 'hip-hop'
+      | 'electronic'
+      | 'house'
+      | 'techno'
+      | 'reggae'
+      | 'afrobeats'
+      | 'latin'
+      | 'rai'
+      | 'world'
+      | 'folk'
+      | 'country'
+      | 'chanson'
+      | 'classical'
+      | 'film-score';
+    /** @description Un lien `https://` ou une adresse e-mail. */
+    Contact: string | unknown | unknown;
+    ProfileUpdate: {
+      name: string;
+      instruments: components['schemas']['Instrument'][];
+      genres: components['schemas']['Genre'][];
+      /** @description Saisie libre ; chaîne vide si non renseignée. */
+      city: string;
+      /** @description Présentation ; chaîne vide si non renseignée. */
+      bio: string;
+      /** @description `null` : aucun contact (A5). */
+      contact: components['schemas']['Contact'] | null;
+    };
+    Profile: {
+      memberId: components['schemas']['MemberId'];
+      name: string;
+      instruments: components['schemas']['Instrument'][];
+      genres: components['schemas']['Genre'][];
+      city: string;
+      bio: string;
+      contact: components['schemas']['Contact'] | null;
+    };
     Credentials: {
       email: string;
       /** Format: password */
@@ -160,6 +304,15 @@ export interface components {
   responses: {
     /** @description La requête ne respecte pas le contrat (code `ValidationError` ou `InvalidJson`). */
     ValidationError: {
+      headers: {
+        [name: string]: unknown;
+      };
+      content: {
+        'application/json': components['schemas']['Error'];
+      };
+    };
+    /** @description Ressource inconnue (code `NotFound`). */
+    NotFound: {
       headers: {
         [name: string]: unknown;
       };
@@ -336,6 +489,95 @@ export interface operations {
         content?: never;
       };
       403: components['responses']['ForbiddenOrigin'];
+      500: components['responses']['InternalError'];
+    };
+  };
+  getMyProfile: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Mon profil. */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['Profile'];
+        };
+      };
+      401: components['responses']['Unauthenticated'];
+      /**
+       * @description Profil absent (code `ProfileMissing`), possible si le serveur s'est arrêté pendant
+       *     l'inscription : l'application propose le formulaire, et `PUT` le crée.
+       */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['Error'];
+        };
+      };
+      500: components['responses']['InternalError'];
+    };
+  };
+  updateMyProfile: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ProfileUpdate'];
+      };
+    };
+    responses: {
+      /** @description Profil enregistré. */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['Profile'];
+        };
+      };
+      400: components['responses']['ValidationError'];
+      401: components['responses']['Unauthenticated'];
+      403: components['responses']['ForbiddenOrigin'];
+      500: components['responses']['InternalError'];
+    };
+  };
+  getProfile: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description Identifiant du membre, celui que renvoie `/sessions/current`. */
+        memberId: components['schemas']['MemberId'];
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Le profil du musicien. */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['Profile'];
+        };
+      };
+      400: components['responses']['ValidationError'];
+      401: components['responses']['Unauthenticated'];
+      404: components['responses']['NotFound'];
       500: components['responses']['InternalError'];
     };
   };
