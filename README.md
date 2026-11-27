@@ -27,7 +27,7 @@ Navigateur ──► Frontend (Angular 22) ──► API (Express 5, TypeScript)
 ```
 
 - **Monolithe modulaire** : un seul backend déployable, découpé par domaine (identité, profil, portfolio, découverte et recherche, confiance). Pas de microservices.
-- **Frontend** : composants standalone, Signals, routes chargées par fonctionnalité.
+- **Frontend** : composants standalone, Signals, routes chargées par fonctionnalité ; interface avec Spartan et Tailwind v4, thème clair et sombre selon le système (voir l'[ADR 0010](docs/adr/0010-base-interface-spartan.md)).
 - **Configuration** par variables d'environnement, validée au démarrage ; aucun secret dans le dépôt.
 - **Données** : MongoDB, fichiers audio compris (GridFS), voir l'[ADR 0005](docs/adr/0005-base-de-donnees-mongodb.md) ; accès avec Mongoose, voir l'[ADR 0008](docs/adr/0008-acces-mongodb-mongoose.md).
 - **Déploiement** : une image Docker par application. La chaîne de livraison viendra plus tard (voir [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)).
@@ -83,6 +83,8 @@ Chaque application (`backend/` et `frontend/`) expose les mêmes commandes :
 
 Spécifiques au backend : `npm run dev` (rechargement automatique), `npm run typecheck`, `npm start` (version compilée). Le premier `npm test` du backend télécharge le binaire MongoDB des tests (environ 100 Mo), puis le réutilise.
 
+Spécifique au frontend : `npx ng g @spartan-ng/cli:ui <composant>` ajoute un composant Spartan dans `libs/ui`.
+
 Contrat d'API ([`backend/openapi.yaml`](backend/openapi.yaml), écrit avant le code, voir l'[ADR 0007](docs/adr/0007-outillage-openapi.md)) :
 
 | Commande | Dossier | Effet |
@@ -102,7 +104,7 @@ docker build -t listenin-frontend frontend
 
 ```text
 backend/      API Express 5 + TypeScript strict
-frontend/     Application Angular 22
+frontend/     Application Angular 22 (composants Spartan copiés dans frontend/libs/ui)
 docs/         produit, architecture, déploiement, décisions (ADR)
 .github/      CI, Dependabot, modèle de pull request
 REPORT.md     rapport d'avancement (jalon du cours Technologies Web)
