@@ -36,6 +36,20 @@ module.exports = defineConfig([
     },
   },
   {
+    // Composants Spartan (helm) copiés dans libs/ui par son outil : ils gardent ses préfixes.
+    files: ['libs/ui/**/*.ts'],
+    rules: {
+      '@angular-eslint/directive-selector': [
+        'error',
+        { type: 'attribute', prefix: ['hlm', 'brn'], style: 'camelCase' },
+      ],
+      '@angular-eslint/component-selector': [
+        'error',
+        { type: 'element', prefix: ['hlm', 'brn'], style: 'kebab-case' },
+      ],
+    },
+  },
+  {
     files: ['**/*.html'],
     extends: [angular.configs.templateRecommended, angular.configs.templateAccessibility],
     rules: {},

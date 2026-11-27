@@ -30,3 +30,6 @@ Thumbs.db
 # Journaux
 *.log
 npm-debug.log*
+
+# Cache de l outil Spartan (Nx)
+.nx/
