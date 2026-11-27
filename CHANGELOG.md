@@ -1,5 +1,34 @@
 # Changelog
 
+## [0.2.0](https://github.com/abdellahjebar/listenin/compare/v0.1.0...v0.2.0) (2026-11-27)
+
+
+### Fonctionnalités
+
+* **frontend:** base d'interface avec Spartan et Tailwind v4 ([5b003fc](https://github.com/abdellahjebar/listenin/commit/5b003fc389bfcb221eefee82dd821fa37136c1bb))
+* **frontend:** écran d'inscription (story 1) ([14c2217](https://github.com/abdellahjebar/listenin/commit/14c22175b6c0138b86c0484e9d7f346019fbb6fb))
+* **frontend:** écran d'inscription d'après le bloc Spartan signup-two-column ([d00ac6c](https://github.com/abdellahjebar/listenin/commit/d00ac6c5448ddfa2c5ec1d6c784ae442ea7cc96d))
+* **frontend:** écran de connexion d'après le bloc Spartan login-two-column ([7b98187](https://github.com/abdellahjebar/listenin/commit/7b98187050eefa84b9742c2fbc8a69ca87448758))
+* **frontend:** écran de connexion et déconnexion (story 2) ([58bb602](https://github.com/abdellahjebar/listenin/commit/58bb6027f4611fbbe3a67f5aaf8d2182e02820c6))
+* **frontend:** écrans d'identité à la hauteur de la fenêtre, avec l'affiche en colonne de droite ([f946f0b](https://github.com/abdellahjebar/listenin/commit/f946f0b33873f7a92bf1793ef4b1c3ea6bab75ca))
+* **frontend:** raccordement à l'API des comptes et état du membre connecté ([c1335bc](https://github.com/abdellahjebar/listenin/commit/c1335bc6dfb01acc21a53fc8eb0199acb6addac7))
+* **frontend:** sessions côté application (connexion, reprise au démarrage, déconnexion) ([ab9e5cc](https://github.com/abdellahjebar/listenin/commit/ab9e5cc12232ad184644cb02d80866b130789992))
+* **frontend:** thème clair et sombre qui suit le système, coquille ListenIn ([a87d278](https://github.com/abdellahjebar/listenin/commit/a87d2783928cd40ccb3f2118bbc2251ed2b18eb4))
+* **frontend:** thème clair par défaut ([674affc](https://github.com/abdellahjebar/listenin/commit/674affc1dc1a3d15755c4e27a3a4ad5ac1f301d3))
+
+
+### Corrections
+
+* **frontend:** titre de connexion sur une ligne, comme dans le bloc ([3e30d6d](https://github.com/abdellahjebar/listenin/commit/3e30d6d2bd7c948824f35a0995da782908a65430))
+
+
+### Documentation
+
+* ADR 0010, base d'interface avec Spartan et Tailwind v4 ([ae871af](https://github.com/abdellahjebar/listenin/commit/ae871af81f16f9734d536f0f00791971dd89b8f5))
+* ADR 0010, thème clair par défaut et écrans sans défilement ([548a66b](https://github.com/abdellahjebar/listenin/commit/548a66bda4c2187f59735bd9b3d6bbe490d9d294))
+* adresse de l'écran de connexion ([9752666](https://github.com/abdellahjebar/listenin/commit/975266676f5029f48efa856b57b5f61d65e50d1e))
+* lancer l'application avec le proxy de l'API, statut de l'inscription ([45160c5](https://github.com/abdellahjebar/listenin/commit/45160c504bedebc004534c34e6d307a427dc8c94))
+
 ## [0.1.0](https://github.com/abdellahjebar/listenin/compare/v0.0.0...v0.1.0) (2026-11-27)
 
 
