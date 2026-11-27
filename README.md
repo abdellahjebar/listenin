@@ -4,7 +4,7 @@ Réseau professionnel pour musiciens : un **portfolio audio**, des **crédits**,
 
 Un musicien y présente ce qu'il a joué, et on l'**écoute** avant de l'engager.
 
-> **Statut : tranche « identité » en cours.** L'API permet de s'inscrire, de se connecter et de se déconnecter (`/api/accounts`, `/api/sessions`) ; l'application propose l'inscription et la connexion (`/inscription`, `/connexion`). La qualité est automatisée (lint, tests, contrat OpenAPI, CI, images Docker). Les fonctionnalités arrivent par tranches, voir [la feuille de route](#feuille-de-route). Le produit n'est volontairement **pas déployé** pour l'instant.
+> **Statut : tranche « profil » en cours.** L'API permet de s'inscrire, de se connecter, de se déconnecter et de gérer son profil de musicien (`/api/accounts`, `/api/sessions`, `/api/profiles`) ; l'application propose l'inscription et la connexion (`/inscription`, `/connexion`). La qualité est automatisée (lint, tests, contrat OpenAPI, CI, images Docker). Les fonctionnalités arrivent par tranches, voir [la feuille de route](#feuille-de-route). Le produit n'est volontairement **pas déployé** pour l'instant.
 
 ## Sommaire
 
