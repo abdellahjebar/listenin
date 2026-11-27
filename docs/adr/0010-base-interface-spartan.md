@@ -44,7 +44,7 @@ Option retenue : **Spartan**, parce qu'il couvre les besoins des tranches à ven
 - ~~Thème sombre piloté par le réglage du système.~~ **Thème clair par défaut** (voir « Modifications ») ; le thème sombre reste prêt derrière la classe `.dark` (variante du preset Spartan) pour un futur sélecteur de thème.
 - Couleurs : base « neutral » de Spartan, **provisoire**. Le fond et la couleur d'accent de ListenIn seront choisis ensemble, dans une PR qui ne changera que les jetons.
 
-**Syncfusion comme source d'idées seulement** : ses blocs servent de modèles de mise en page ; on les **reconstruit** avec les composants Spartan et nos jetons, sans jamais copier leur code ni dépendre de ses paquets.
+**Syncfusion comme source d'idées seulement** (licence propriétaire) : ses blocs servent de modèles de mise en page ; on les **reconstruit** avec les composants Spartan et nos jetons, sans jamais copier leur code ni dépendre de ses paquets.
 
 **Règles d'usage**
 - Les composants n'utilisent **que les jetons** (`bg-primary`, `text-muted-foreground`…), jamais une couleur en dur.
@@ -65,6 +65,7 @@ Option retenue : **Spartan**, parce qu'il couvre les besoins des tranches à ven
 ### Modifications
 
 - **2026-11-27 : thème clair par défaut.** Décision du porteur du projet après essai des écrans : l'application s'affiche en clair quel que soit le réglage du système. Les jetons sombres restent sous `:root.dark` ; aucun élément ne pose encore cette classe.
+- **2026-11-27 : Spartan d'abord, d'autres bibliothèques admises.** Décision du porteur du projet : quand Spartan n'a pas un composant, une autre bibliothèque peut s'ajouter (Zard UI, ng-primitives…), si sa licence est libre, qu'elle suit Angular 22, que son apparence reste cohérente avec nos jetons et que son accessibilité est vérifiée. Chaque cas est noté dans [docs/INTERFACE.md](../INTERFACE.md).
 - **2026-11-27 : écrans d'identité à la hauteur de la fenêtre.** Les pages d'inscription et de connexion ne défilent jamais ; si le formulaire dépasse (petit écran, zoom), seule sa colonne défile, ce qui respecte WCAG 1.4.10. L'image fournie par le porteur du projet occupe la colonne de droite.
 
 ### Déclencheurs de révision
