@@ -18,14 +18,16 @@ import { HlmComboboxChipRemove } from './hlm-combobox-chip-remove';
     <ng-content />
 
     @if (showRemove()) {
-      <button hlmComboboxChipRemove>
-        <ng-icon name="lucideX" />
+      <button hlmComboboxChipRemove [attr.aria-label]="removeLabel()">
+        <ng-icon name="lucideX" aria-hidden="true" />
       </button>
     }
   `,
 })
 export class HlmComboboxChip {
   public readonly showRemove = input<boolean, BooleanInput>(true, { transform: booleanAttribute });
+  /** ListenIn : nom de la croix pour les lecteurs d'écran (axe : button-name), absent chez Spartan. */
+  public readonly removeLabel = input('Retirer');
 
   constructor() {
     classes(
