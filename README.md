@@ -76,7 +76,7 @@ npm ci
 npm start
 ```
 
-Ouvrir <http://localhost:4200> ; l'inscription est sur <http://localhost:4200/inscription>, la connexion sur <http://localhost:4200/connexion>. Le serveur de développement renvoie `/api` vers l'API (`frontend/proxy.conf.json`) : l'application et l'API partagent la même origine, comme en production, et `APP_ORIGIN` vaut `http://localhost:4200`.
+Ouvrir <http://localhost:4200> ; l'inscription est sur <http://localhost:4200/inscription>, la connexion sur <http://localhost:4200/connexion> ; une fois connecté, on arrive sur « Découvrir » (<http://localhost:4200/decouvrir>). Le serveur de développement renvoie `/api` vers l'API (`frontend/proxy.conf.json`) : l'application et l'API partagent la même origine, comme en production, et `APP_ORIGIN` vaut `http://localhost:4200`.
 
 ## Commandes
 

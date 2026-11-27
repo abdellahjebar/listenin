@@ -27,6 +27,8 @@ describe('LoginForm (story 2, écran)', () => {
         provideRouter([
           { path: '', component: Blank },
           { path: 'inscription', component: Blank },
+          { path: 'decouvrir', component: Blank },
+          { path: 'profil', component: Blank },
         ]),
       ],
     }).compileComponents();
@@ -89,7 +91,17 @@ describe('LoginForm (story 2, écran)', () => {
     await settle();
 
     expect(TestBed.inject(SessionStore).currentMember()).toEqual(MEMBER);
-    expect(TestBed.inject(Router).url).toBe('/');
+    expect(TestBed.inject(Router).url).toBe('/decouvrir');
+  });
+
+  it('après connexion, retour à la page réservée demandée (?retour=/profil)', async () => {
+    const router = TestBed.inject(Router);
+    await router.navigateByUrl('/?retour=%2Fprofil');
+    await submitWith(MEMBER.email, PASSWORD);
+    http.expectOne('/api/sessions').flush(MEMBER);
+    await settle();
+
+    expect(router.url).toBe('/profil');
   });
 
   it('F4 : identifiants refusés, un seul message, sans dire lequel est faux', async () => {
