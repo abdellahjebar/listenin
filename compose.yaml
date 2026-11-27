@@ -10,7 +10,7 @@ name: listenin
 
 services:
   mongo:
-    image: mongo:8.2
+    image: mongo:8.3
     # Port fermé : seule l'API atteint la base. Pas de mot de passe en local pour cette raison ;
     # en production, l'accès à MongoDB est authentifié (docs/DEPLOYMENT.md).
     volumes:
