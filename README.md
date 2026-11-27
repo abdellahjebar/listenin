@@ -4,7 +4,7 @@ Réseau professionnel pour musiciens : un **portfolio audio**, des **crédits**,
 
 Un musicien y présente ce qu'il a joué, et on l'**écoute** avant de l'engager.
 
-> **Statut : tranche « identité » en cours.** L'API permet de s'inscrire, de se connecter et de se déconnecter (`/api/accounts`, `/api/sessions`) ; l'application Angular est encore vide. La qualité est automatisée (lint, tests, contrat OpenAPI, CI, images Docker). Les fonctionnalités arrivent par tranches, voir [la feuille de route](#feuille-de-route). Le produit n'est volontairement **pas déployé** pour l'instant.
+> **Statut : tranche « identité » en cours.** L'API permet de s'inscrire, de se connecter et de se déconnecter (`/api/accounts`, `/api/sessions`) ; l'application propose l'écran d'inscription (`/inscription`). La qualité est automatisée (lint, tests, contrat OpenAPI, CI, images Docker). Les fonctionnalités arrivent par tranches, voir [la feuille de route](#feuille-de-route). Le produit n'est volontairement **pas déployé** pour l'instant.
 
 ## Sommaire
 
@@ -68,7 +68,7 @@ npm ci
 npm start
 ```
 
-Ouvrir <http://localhost:4200>.
+Ouvrir <http://localhost:4200> ; l'inscription est sur <http://localhost:4200/inscription>. Le serveur de développement renvoie `/api` vers l'API (`frontend/proxy.conf.json`) : l'application et l'API partagent la même origine, comme en production, et `APP_ORIGIN` vaut `http://localhost:4200`.
 
 ## Commandes
 
