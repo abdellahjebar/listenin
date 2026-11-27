@@ -15,8 +15,11 @@ import { SessionStore } from '../../core/session/session-store';
           Bienvenue, {{ member.name }}
         </h1>
         <p class="text-muted-foreground max-w-prose text-lg">
-          Votre compte est créé. Votre profil et votre portfolio arrivent bientôt.
+          Vous êtes connecté. Votre profil et votre portfolio arrivent bientôt.
         </p>
+        <div>
+          <button hlmBtn variant="outline" type="button" (click)="signOut()">Se déconnecter</button>
+        </div>
       } @else {
         <h1 class="text-4xl font-semibold tracking-tight text-balance">
           Le réseau professionnel des musiciens
@@ -24,8 +27,9 @@ import { SessionStore } from '../../core/session/session-store';
         <p class="text-muted-foreground max-w-prose text-lg">
           Un portfolio audio, des crédits, des contacts : on écoute un musicien avant de l'engager.
         </p>
-        <div>
+        <div class="flex flex-wrap gap-3">
           <a hlmBtn routerLink="/inscription">Créer un compte</a>
+          <a hlmBtn variant="outline" routerLink="/connexion">Se connecter</a>
         </div>
       }
     </main>
@@ -33,4 +37,8 @@ import { SessionStore } from '../../core/session/session-store';
 })
 export class HomePage {
   protected readonly session = inject(SessionStore);
+
+  protected signOut(): Promise<void> {
+    return this.session.signOut();
+  }
 }

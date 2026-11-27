@@ -56,7 +56,7 @@ interface SignupModel {
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <form [formRoot]="form" novalidate>
-      <hlm-field-group>
+      <hlm-field-group class="gap-4">
         <div class="flex flex-col items-center gap-1 text-center">
           <h1 class="text-2xl font-bold">Créer votre compte</h1>
           <p class="text-muted-foreground text-sm text-balance">
@@ -98,11 +98,6 @@ interface SignupModel {
             placeholder="vous@exemple.com"
             [formField]="form.email"
           />
-          @if (!(form.email().touched() && form.email().invalid())) {
-            <hlm-field-description>
-              Elle sert à vous connecter. Elle n'est jamais partagée.
-            </hlm-field-description>
-          }
           @for (error of form.email().errors(); track error) {
             <hlm-field-error [validator]="error.kind">{{ error.message }}</hlm-field-error>
           }
@@ -134,9 +129,6 @@ interface SignupModel {
             autocomplete="new-password"
             [formField]="form.confirmPassword"
           />
-          @if (!(form.confirmPassword().touched() && form.confirmPassword().invalid())) {
-            <hlm-field-description>Saisissez à nouveau votre mot de passe.</hlm-field-description>
-          }
           @if (form.confirmPassword().touched() && form.confirmPassword().invalid()) {
             @for (error of form.confirmPassword().errors(); track error) {
               <hlm-field-error [validator]="error.kind">{{ error.message }}</hlm-field-error>
@@ -170,11 +162,10 @@ interface SignupModel {
         <hlm-field-separator>Ou continuer avec</hlm-field-separator>
 
         <hlm-field>
-          <button hlmBtn variant="outline" type="button" disabled aria-describedby="google-soon">
+          <button hlmBtn variant="outline" type="button" disabled>
             <ng-icon name="remixGoogleFill" class="text-xl" aria-hidden="true" />
-            Continuer avec Google
+            Continuer avec Google · bientôt
           </button>
-          <p hlmFieldDescription id="google-soon" class="text-center">Bientôt disponible.</p>
           <p hlmFieldDescription class="text-center">
             Déjà membre ?
             <a routerLink="/connexion">Se connecter</a>

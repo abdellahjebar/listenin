@@ -41,7 +41,7 @@ Option retenue : **Spartan**, parce qu'il couvre les besoins des tranches à ven
 **Mise en place**
 - Tailwind v4 par `@tailwindcss/postcss` (`.postcssrc.json`), preset Spartan importé dans `src/styles.css`.
 - Composants *helm* copiés par l'outil de Spartan dans `libs/ui` (alias `@spartan-ng/helm/*`), ajoutés au besoin : `npx ng g @spartan-ng/cli:ui <composant>`. Ils sont à nous, relus et testés comme le reste du code ; seule leur règle de préfixe (`hlm`, `brn`) diffère.
-- Thème sombre **piloté par le réglage du système** (`prefers-color-scheme`), sans script : la variante `dark:` de Tailwind et les jetons sombres reposent sur la requête média. Un bouton de choix du thème pourra s'y ajouter plus tard.
+- ~~Thème sombre piloté par le réglage du système.~~ **Thème clair par défaut** (voir « Modifications ») ; le thème sombre reste prêt derrière la classe `.dark` (variante du preset Spartan) pour un futur sélecteur de thème.
 - Couleurs : base « neutral » de Spartan, **provisoire**. Le fond et la couleur d'accent de ListenIn seront choisis ensemble, dans une PR qui ne changera que les jetons.
 
 **Syncfusion comme source d'idées seulement** : ses blocs servent de modèles de mise en page ; on les **reconstruit** avec les composants Spartan et nos jetons, sans jamais copier leur code ni dépendre de ses paquets.
@@ -61,6 +61,11 @@ Option retenue : **Spartan**, parce qu'il couvre les besoins des tranches à ven
 * Mauvais : accessibilité garantie par une équipe de neuf contributeurs réguliers, sans audit public : elle se vérifie écran par écran.
 * Mauvais : l'outil de Spartan (dépendance de développement) embarque une version de `zod` signalée par l'audit. Il n'est jamais livré dans l'application : l'audit de production reste propre, l'audit complet le signalera jusqu'à sa mise à jour.
 * Mauvais : aucun lecteur audio n'existe dans les bibliothèques libres ; celui du portfolio sera un composant de ListenIn.
+
+### Modifications
+
+- **2026-11-27 : thème clair par défaut.** Décision du porteur du projet après essai des écrans : l'application s'affiche en clair quel que soit le réglage du système. Les jetons sombres restent sous `:root.dark` ; aucun élément ne pose encore cette classe.
+- **2026-11-27 : écrans d'identité à la hauteur de la fenêtre.** Les pages d'inscription et de connexion ne défilent jamais ; si le formulaire dépasse (petit écran, zoom), seule sa colonne défile, ce qui respecte WCAG 1.4.10. L'image fournie par le porteur du projet occupe la colonne de droite.
 
 ### Déclencheurs de révision
 

@@ -94,7 +94,7 @@ describe('SignupForm (story 1, écran)', () => {
       b.textContent?.includes('Continuer avec Google'),
     )!;
     expect(google.disabled).toBe(true);
-    expect(google.getAttribute('aria-describedby')).toBe('google-soon');
+    expect(google.textContent).toContain('bientôt');
   });
 
   it('formulaire vide : aucune requête, erreurs affichées, focus sur le premier champ', async () => {
