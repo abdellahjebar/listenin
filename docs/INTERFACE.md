@@ -21,9 +21,10 @@ Un composant n'est **installé** que dans la pull request de l'écran qui l'util
 |---|---|---|
 | Inscription | bloc `signup-two-column` ; Field, Input, Checkbox, Button, Spinner | fait (v0.2.0) |
 | Connexion | bloc `login-two-column` ; Field, Input, Button, Spinner | fait (v0.2.0) |
-| Coquille de l'application connectée | barre de navigation (lien actif marqué par `aria-current`) ; **Avatar** (initiales) + **Dropdown Menu** : nom et adresse, Se déconnecter ; Mon profil et Modifier mon profil s'ajoutent avec #66 | fait (#73) |
-| Modifier mon profil | **Dialog** (Sheet si le formulaire déborde, mesuré) ; Field, Input, **Combobox multiple avec recherche pendant la frappe** pour les instruments et les genres (Autocomplete si un seul choix), **Textarea**, **Sonner**, **Skeleton** | tranche Profil (#66) |
-| Complétez votre profil | page entière après l'inscription, mêmes champs, bouton « Plus tard » | tranche Profil (#66) |
+| Coquille de l'application connectée | barre de navigation (lien actif marqué par `aria-current`) ; **Avatar** (initiales) + **Dropdown Menu** : nom et adresse, Mon profil, Modifier mon profil, Se déconnecter ; **Sonner** pour les confirmations | fait (#73, #66) |
+| Mon profil | fiche (Avatar, **Badge**), **Skeleton** au chargement, état « profil vide » | fait (#66) |
+| Modifier mon profil | **Dialog** (mesurée : 532 px de haut dans une fenêtre de 657 px, pas de Sheet) ; Field, Input, **Combobox multiple avec recherche pendant la frappe** pour les instruments et les genres, **Textarea** avec compteur, **Sonner** « Profil enregistré » ; ouverte aussi par `/profil?modifier=1` | fait (#66) |
+| Complétez votre profil | `/bienvenue`, page entière après l'inscription, même formulaire, bouton « Plus tard » ; rappel sur Découvrir tant qu'aucun instrument n'est choisi | fait (#66) |
 | Profil d'un musicien | Avatar, Badge, **Skeleton**, état « introuvable », **Empty** sans bouton si aucune piste partagée (rien ne révèle les pistes privées, F1) | tranche Profil (#67) |
 | Mon portfolio | liste de pistes, **Empty** (« Aucune piste pour l'instant », bouton « Déposer une piste ») | tranche Portfolio |
 | Déposer une piste | Dialog ; **Progress** (envoi du fichier), **Textarea** (crédits), Checkbox (attestation), **Sonner** | tranche Portfolio |
@@ -32,5 +33,7 @@ Un composant n'est **installé** que dans la pull request de l'écran qui l'util
 | Découvrir | état vide (**Empty**) en attendant le Portfolio ; puis liste de pistes, **Skeleton**, pagination | page vide faite (#73), contenu : tranche Découvrir |
 | Messagerie entre membres | **Message** + Message Scroller | palier 2 |
 | Navigation latérale | **Sidebar**, si le menu grandit | candidate, palier 2 |
+
+Sélecteur d'étiquettes (`app-tag-picker`, instruments et genres) : Combobox multiple de Spartan lié au champ du formulaire. Entrée choisit la première suggestion ; la recherche ignore accents et majuscules. Deux écarts à Spartan : Échap, liste fermée, ne vide plus tous les choix ; chaque croix porte un nom (« Retirer Piano »), ajouté dans `libs/ui/combobox` (entrée `removeLabel`), car axe signalait des boutons sans nom.
 
 Aucune bibliothèque libre ne propose de lecteur audio : le lecteur de ListenIn est un composant à nous, construit sur le Slider de Spartan.

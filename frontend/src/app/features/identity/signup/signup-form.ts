@@ -260,7 +260,7 @@ export class SignupForm {
     try {
       const member = await this.accounts.create({ name, email, password, acceptTerms: true });
       this.session.signedIn(member);
-      await this.router.navigateByUrl('/decouvrir');
+      await this.router.navigateByUrl('/bienvenue');
       return undefined;
     } catch (error) {
       const failure = toApiFailure(error);

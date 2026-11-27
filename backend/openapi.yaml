@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: API ListenIn
-  version: 0.2.0
+  version: 0.2.1
   summary: Réseau professionnel pour musiciens.
   description: |
     Contrat de l'API de ListenIn, écrit avant le code (ADR 0003 et 0007).
@@ -352,9 +352,11 @@ components:
       type: string
       maxLength: 254
       anyOf:
-        - format: uri
+        - type: string
+          format: uri
           pattern: '^https://'
-        - format: email
+        - type: string
+          format: email
     ProfileUpdate:
       type: object
       additionalProperties: false

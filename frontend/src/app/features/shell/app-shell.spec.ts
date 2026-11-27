@@ -70,6 +70,20 @@ describe('AppShell (coquille de l’application connectée)', () => {
     expect(TestBed.inject(Router).url).toBe('/');
   });
 
+  it('le menu du compte mène à « Mon profil » et à sa modification', async () => {
+    const { fixture, root } = await render();
+    menuButton(root).click();
+    await fixture.whenStable();
+
+    const links = Array.from(
+      document.body.querySelectorAll<HTMLAnchorElement>('hlm-dropdown-menu a'),
+    ).map((a) => [a.textContent?.trim(), a.getAttribute('href')]);
+    expect(links).toEqual([
+      ['Mon profil', '/profil'],
+      ['Modifier mon profil', '/profil?modifier=1'],
+    ]);
+  });
+
   it('ACC-1 : aucune violation axe', async () => {
     const { root } = await render();
     const result = await axe.run(root, { rules: { 'color-contrast': { enabled: false } } });
