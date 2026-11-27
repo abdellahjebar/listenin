@@ -112,8 +112,12 @@ jobs:
         run: |
           set -euo pipefail
           base=http://localhost:8080
-          curl --fail --silent "$base/api/health" | grep -q '"status":"ok"'
-          curl --fail --silent "$base/inscription" | grep -q '<app-root'
+          # Réponse lue en entier avant d'être vérifiée : « curl | grep -q » échoue au hasard
+          # avec pipefail (grep s'arrête tôt, curl reçoit SIGPIPE).
+          health=$(curl --fail --silent "$base/api/health")
+          [[ "$health" == *'"status":"ok"'* ]]
+          page=$(curl --fail --silent "$base/inscription")
+          [[ "$page" == *'<app-root'* ]]
           status=$(curl --silent --output /dev/null --write-out '%{http_code}' \
             --header 'Origin: http://localhost:8080' --header 'Content-Type: application/json' \
             --data '{"name":"CI","email":"ci@example.com","password":"une phrase de passe assez longue","acceptTerms":true}' \
