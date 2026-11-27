@@ -8,5 +8,10 @@ export const routes: Routes = [
     title: 'Créer votre compte · ListenIn',
     loadComponent: () => import('./features/identity/signup/signup-page'),
   },
+  {
+    path: 'connexion',
+    title: 'Se connecter · ListenIn',
+    loadComponent: () => import('./features/identity/login/login-page'),
+  },
   { path: '**', redirectTo: '' },
 ];
