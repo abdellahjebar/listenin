@@ -30,6 +30,7 @@ describe('SignupForm (story 1, écran)', () => {
         provideRouter([
           { path: '', component: Blank },
           { path: 'connexion', component: Blank },
+          { path: 'decouvrir', component: Blank },
         ]),
       ],
     }).compileComponents();
@@ -145,10 +146,10 @@ describe('SignupForm (story 1, écran)', () => {
     expect(request.request.body).toEqual({ ...VALID, acceptTerms: true });
 
     request.flush({ id: '0123456789abcdef01234567', name: VALID.name, email: VALID.email });
-    await fixture.whenStable();
+    await settle();
 
     expect(TestBed.inject(SessionStore).currentMember()?.name).toBe(VALID.name);
-    expect(router.url).toBe('/');
+    expect(router.url).toBe('/decouvrir');
   });
 
   it('pendant l’envoi : bouton désactivé et état annoncé', async () => {

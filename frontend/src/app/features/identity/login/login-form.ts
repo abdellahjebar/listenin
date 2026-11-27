@@ -8,7 +8,7 @@ import {
   required,
   type FieldTree,
 } from '@angular/forms/signals';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { remixGoogleFill } from '@ng-icons/remixicon';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
@@ -17,6 +17,7 @@ import { HlmInputImports } from '@spartan-ng/helm/input';
 import { HlmSpinnerImports } from '@spartan-ng/helm/spinner';
 import { toApiFailure } from '../../../core/api/api-failure';
 import { SessionsApi } from '../../../core/api/sessions-api';
+import { safeReturnUrl } from '../../../core/session/guards';
 import { SessionStore } from '../../../core/session/session-store';
 
 interface LoginModel {
@@ -123,6 +124,7 @@ export class LoginForm {
   private readonly sessions = inject(SessionsApi);
   private readonly session = inject(SessionStore);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
 
   /** Erreur qui ne concerne aucun champ : identifiants refusés, trop de tentatives… */
   protected readonly generalError = signal<string | null>(null);
@@ -153,7 +155,10 @@ export class LoginForm {
     try {
       const member = await this.sessions.logIn({ email, password });
       this.session.signedIn(member);
-      await this.router.navigateByUrl('/');
+      // Retour à la page réservée demandée avant la connexion, sinon « Découvrir ».
+      await this.router.navigateByUrl(
+        safeReturnUrl(this.route.snapshot.queryParamMap.get('retour')),
+      );
     } catch (error) {
       const { status } = toApiFailure(error);
       this.generalError.set(
