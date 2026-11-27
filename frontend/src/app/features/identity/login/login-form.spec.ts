@@ -65,7 +65,7 @@ describe('LoginForm (story 2, écran)', () => {
   }
 
   it('affiche le bloc avec le contenu de ListenIn', () => {
-    expect(root.querySelector('h1')?.textContent).toContain('Connectez-vous à votre compte');
+    expect(root.querySelector('h1')?.textContent).toContain('Connectez-vous');
     expect(root.textContent).toContain('Adresse e-mail');
     expect(root.textContent).toContain('Mot de passe oublié ? Bientôt');
     expect(root.querySelector('a[href="/inscription"]')?.textContent).toContain('Créer un compte');

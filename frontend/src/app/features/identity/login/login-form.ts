@@ -47,9 +47,9 @@ interface LoginModel {
     <form [formRoot]="form" novalidate>
       <hlm-field-group>
         <div class="flex flex-col items-center gap-1 text-center">
-          <h1 class="text-2xl font-bold">Connectez-vous à votre compte</h1>
+          <h1 class="text-2xl font-bold">Connectez-vous</h1>
           <p class="text-muted-foreground text-sm text-balance">
-            Saisissez votre adresse e-mail pour vous connecter
+            Accédez à votre compte ListenIn
           </p>
         </div>
 
