@@ -1,5 +1,41 @@
 # Changelog
 
+## [0.4.0](https://github.com/abdellahjebar/listenin/compare/v0.3.0...v0.4.0) (2026-11-27)
+
+
+### Fonctionnalités
+
+* **api:** contrat du profil (stories 3, 4, 5) ([59b72f3](https://github.com/abdellahjebar/listenin/commit/59b72f355236fdffbadb6956d304a094be7cc481))
+* **api:** contrat du profil, listes fermées d'instruments et de genres (0.2.0) ([659693b](https://github.com/abdellahjebar/listenin/commit/659693b663f0d095fa0273d247e368fc168ff5ed))
+* **frontend:** accès réservés aux membres et retour après connexion ([1b43491](https://github.com/abdellahjebar/listenin/commit/1b43491b35b102bdd129988daa5456413c391cd8))
+* **frontend:** coquille connectée, menu du compte et Découvrir vide ([a5f5c57](https://github.com/abdellahjebar/listenin/commit/a5f5c57bfa5c9c036f8765e54144ae6e0b8f06f7))
+* **frontend:** coquille de l'application connectée ([fcee897](https://github.com/abdellahjebar/listenin/commit/fcee8979ac79e3b487d25722282b62b6e119bd49))
+* **profile:** API du profil (stories 3, 4, 5) ([b032ced](https://github.com/abdellahjebar/listenin/commit/b032cedfc48bdcb9311d05fc9837116dbc9f8de1))
+* **profile:** lire, enregistrer et consulter un profil (A4 à A7) ([52d432a](https://github.com/abdellahjebar/listenin/commit/52d432add968672bfc2fe760457c9e86efad9b38))
+* **profile:** modèle du profil complet et index pour la recherche ([94e14b1](https://github.com/abdellahjebar/listenin/commit/94e14b12f979def8939557004e133bd983d15481))
+
+
+### Corrections
+
+* **frontend:** erreurs de l'inscription sur la ligne du libellé, aucun défilement ([cfbadd3](https://github.com/abdellahjebar/listenin/commit/cfbadd305f950e2973bf29197da9928febc45688))
+* **frontend:** inscription sans défilement, même avec les erreurs ([2f61947](https://github.com/abdellahjebar/listenin/commit/2f6194729ed5c3f8f9b04c388754e68d04c0751f))
+
+
+### Performances
+
+* **frontend:** affiche redimensionnée à sa taille d'affichage ([494b40c](https://github.com/abdellahjebar/listenin/commit/494b40cc85a495824de39385851bc5095bb44f5a))
+
+
+### Documentation
+
+* ADR 0011 et registre d'interface ([0895583](https://github.com/abdellahjebar/listenin/commit/08955838d4ba2e889251872490ce91387aa30d12))
+* ADR 0011, instruments et genres en listes fermées ([8955793](https://github.com/abdellahjebar/listenin/commit/89557933862a650d0986202b385888bf4fba0ea2))
+* composant Empty pour les états vides, autres bibliothèques admises après Spartan ([4684bf0](https://github.com/abdellahjebar/listenin/commit/4684bf09bb235e691ad79c6366db776cdc7af5e4))
+* recherche pendant la frappe pour choisir instruments et genres ([a4de863](https://github.com/abdellahjebar/listenin/commit/a4de86376f1c3a59caef5725378d4bbda9b63a4d))
+* registre d'interface et README, coquille connectée ([1da9aac](https://github.com/abdellahjebar/listenin/commit/1da9aacbfa1d218f42aab00c950d3f3d4d9978d3))
+* registre d'interface, composants Spartan par écran ([c80ce14](https://github.com/abdellahjebar/listenin/commit/c80ce14be539f2109a0e1adc05939cf399042dd0))
+* statut, API du profil disponible ([4afbf81](https://github.com/abdellahjebar/listenin/commit/4afbf815cd806716ba2b24db909ce0bc788c04ca))
+
 ## [0.3.0](https://github.com/abdellahjebar/listenin/compare/v0.2.0...v0.3.0) (2026-11-27)
 
 
