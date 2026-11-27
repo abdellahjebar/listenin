@@ -48,9 +48,7 @@ interface LoginModel {
       <hlm-field-group>
         <div class="flex flex-col items-center gap-1 text-center">
           <h1 class="text-2xl font-bold">Connectez-vous</h1>
-          <p class="text-muted-foreground text-sm text-balance">
-            Accédez à votre compte ListenIn
-          </p>
+          <p class="text-muted-foreground text-sm text-balance">Accédez à votre compte ListenIn</p>
         </div>
 
         @if (generalError(); as message) {
