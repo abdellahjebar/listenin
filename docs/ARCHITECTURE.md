@@ -91,4 +91,3 @@ Chaque complexité n'entre que si son déclencheur apparaît.
 Pendant les tranches :
 
 - **Fichiers audio** (tranche « portfolio ») : formats acceptés, taille et durée maximales.
-- **Instruments et genres** (tranche « profil ») : liste fermée ou saisie libre.
