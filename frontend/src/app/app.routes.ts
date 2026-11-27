@@ -34,6 +34,16 @@ export const routes: Routes = [
         title: 'Découvrir · ListenIn',
         loadComponent: () => import('./features/discover/discover-page'),
       },
+      {
+        path: 'profil',
+        title: 'Mon profil · ListenIn',
+        loadComponent: () => import('./features/profile/profile-page'),
+      },
+      {
+        path: 'bienvenue',
+        title: 'Complétez votre profil · ListenIn',
+        loadComponent: () => import('./features/profile/welcome-page'),
+      },
     ],
   },
   { path: '**', redirectTo: '' },

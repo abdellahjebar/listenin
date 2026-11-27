@@ -4,6 +4,7 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideAudioLines } from '@ng-icons/lucide';
 import { HlmAvatarImports } from '@spartan-ng/helm/avatar';
 import { HlmDropdownMenuImports } from '@spartan-ng/helm/dropdown-menu';
+import { HlmToasterImports } from '@spartan-ng/helm/sonner';
 import { SessionStore } from '../../core/session/session-store';
 import { initials } from '../../shared/initials';
 
@@ -17,6 +18,7 @@ import { initials } from '../../shared/initials';
     NgIcon,
     HlmAvatarImports,
     HlmDropdownMenuImports,
+    HlmToasterImports,
   ],
   providers: [provideIcons({ lucideAudioLines })],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -66,6 +68,11 @@ import { initials } from '../../shared/initials';
                   </span>
                 </hlm-dropdown-menu-label>
                 <hlm-dropdown-menu-separator />
+                <a hlmDropdownMenuItem routerLink="/profil">Mon profil</a>
+                <a hlmDropdownMenuItem routerLink="/profil" [queryParams]="{ modifier: 1 }">
+                  Modifier mon profil
+                </a>
+                <hlm-dropdown-menu-separator />
                 <button hlmDropdownMenuItem type="button" (click)="signOut()">
                   Se déconnecter
                 </button>
@@ -77,6 +84,7 @@ import { initials } from '../../shared/initials';
       <main class="mx-auto w-full max-w-5xl flex-1 px-4 py-8">
         <router-outlet />
       </main>
+      <hlm-toaster />
     </div>
   `,
 })

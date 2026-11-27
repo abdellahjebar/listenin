@@ -31,6 +31,7 @@ describe('SignupForm (story 1, écran)', () => {
           { path: '', component: Blank },
           { path: 'connexion', component: Blank },
           { path: 'decouvrir', component: Blank },
+          { path: 'bienvenue', component: Blank },
         ]),
       ],
     }).compileComponents();
@@ -136,7 +137,7 @@ describe('SignupForm (story 1, écran)', () => {
     );
   });
 
-  it('inscription réussie : corps attendu par l’API, membre gardé, retour à l’accueil', async () => {
+  it('inscription réussie : corps attendu par l’API, membre gardé, puis « Complétez votre profil »', async () => {
     const router = TestBed.inject(Router);
     fillValid();
     await submit();
@@ -149,7 +150,7 @@ describe('SignupForm (story 1, écran)', () => {
     await settle();
 
     expect(TestBed.inject(SessionStore).currentMember()?.name).toBe(VALID.name);
-    expect(router.url).toBe('/decouvrir');
+    expect(router.url).toBe('/bienvenue');
   });
 
   it('pendant l’envoi : bouton désactivé et état annoncé', async () => {
