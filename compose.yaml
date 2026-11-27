@@ -1,0 +1,54 @@
+# ListenIn en une commande : docker compose up --build, puis http://localhost:8080
+#
+#   navigateur ─► web (nginx, :8080) ─┬─ /      → application Angular
+#                                     └─ /api/  → api (Express, :3000, non exposé)
+#                                                    └─► mongo (MongoDB, non exposé, volume)
+#
+# Utiliser « localhost » et non « 127.0.0.1 » : le cookie de session est « Secure » (accepté sur
+# localhost sans HTTPS) et l'API vérifie l'en-tête Origin (APP_ORIGIN).
+name: listenin
+
+services:
+  mongo:
+    image: mongo:8.2
+    # Port fermé : seule l'API atteint la base. Pas de mot de passe en local pour cette raison ;
+    # en production, l'accès à MongoDB est authentifié (docs/DEPLOYMENT.md).
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: ['CMD', 'mongosh', '--quiet', '--eval', "db.adminCommand('ping').ok"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+    restart: unless-stopped
+
+  api:
+    build: ./backend
+    environment:
+      NODE_ENV: production
+      PORT: '3000'
+      LOG_LEVEL: info
+      MONGODB_URI: mongodb://mongo:27017/listenin
+      APP_ORIGIN: http://localhost:8080
+      # nginx est le seul proxy devant l'API : il transmet l'adresse du visiteur.
+      TRUST_PROXY: '1'
+    depends_on:
+      mongo:
+        condition: service_healthy
+    restart: unless-stopped
+
+  web:
+    build: ./frontend
+    environment:
+      API_UPSTREAM: http://api:3000
+    ports:
+      # Seulement sur cette machine, pas sur le réseau local.
+      - '127.0.0.1:8080:8080'
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  mongo-data:
