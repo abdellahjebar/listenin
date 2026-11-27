@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.3.0](https://github.com/abdellahjebar/listenin/compare/v0.2.0...v0.3.0) (2026-11-27)
+
+
+### Fonctionnalités
+
+* **backend:** TRUST_PROXY pour compter les vraies adresses IP derrière nginx ([b58a5b1](https://github.com/abdellahjebar/listenin/commit/b58a5b17bf9128bb726a4701495ab1b2be286904))
+* **frontend:** nginx relaie /api vers l'API, adresse configurable par gabarit ([c07e717](https://github.com/abdellahjebar/listenin/commit/c07e7170005ea5960567ac1e727be00d4b48a2bd))
+
+
+### Documentation
+
+* démarrage avec docker compose et prérequis de déploiement ([b587e27](https://github.com/abdellahjebar/listenin/commit/b587e277589ebbc65981cc4ca62a2732c986ae20))
+
 ## [0.2.0](https://github.com/abdellahjebar/listenin/compare/v0.1.0...v0.2.0) (2026-11-27)
 
 
