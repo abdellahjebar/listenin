@@ -73,8 +73,19 @@ interface SignupModel {
           </p>
         }
 
+        <!--
+          Chaque message (aide ou erreur) tient sur la ligne du libellé, à droite : afficher une
+          erreur ne change pas la hauteur du formulaire, qui ne défile jamais.
+        -->
         <hlm-field>
-          <label hlmFieldLabel for="name">Nom</label>
+          <div class="flex items-baseline justify-between gap-2">
+            <label hlmFieldLabel for="name">Nom</label>
+            @if (form.name().errors()[0]; as error) {
+              <hlm-field-error [validator]="error.kind" class="text-xs">{{
+                error.message
+              }}</hlm-field-error>
+            }
+          </div>
           <input
             hlmInput
             type="text"
@@ -83,13 +94,17 @@ interface SignupModel {
             placeholder="Ada Lovelace"
             [formField]="form.name"
           />
-          @for (error of form.name().errors(); track error) {
-            <hlm-field-error [validator]="error.kind">{{ error.message }}</hlm-field-error>
-          }
         </hlm-field>
 
         <hlm-field>
-          <label hlmFieldLabel for="email">Adresse e-mail</label>
+          <div class="flex items-baseline justify-between gap-2">
+            <label hlmFieldLabel for="email">Adresse e-mail</label>
+            @if (form.email().errors()[0]; as error) {
+              <hlm-field-error [validator]="error.kind" class="text-xs">{{
+                error.message
+              }}</hlm-field-error>
+            }
+          </div>
           <input
             hlmInput
             type="email"
@@ -98,13 +113,21 @@ interface SignupModel {
             placeholder="vous@exemple.com"
             [formField]="form.email"
           />
-          @for (error of form.email().errors(); track error) {
-            <hlm-field-error [validator]="error.kind">{{ error.message }}</hlm-field-error>
-          }
         </hlm-field>
 
         <hlm-field>
-          <label hlmFieldLabel for="password">Mot de passe</label>
+          <div class="flex items-baseline justify-between gap-2">
+            <label hlmFieldLabel for="password">Mot de passe</label>
+            @if (form.password().touched() && form.password().invalid()) {
+              @if (form.password().errors()[0]; as error) {
+                <hlm-field-error [validator]="error.kind" class="text-xs">{{
+                  error.message
+                }}</hlm-field-error>
+              }
+            } @else {
+              <span hlmFieldDescription class="text-xs">{{ passwordMin }} caractères min.</span>
+            }
+          </div>
           <input
             hlmInput
             type="password"
@@ -112,16 +135,17 @@ interface SignupModel {
             autocomplete="new-password"
             [formField]="form.password"
           />
-          @if (!(form.password().touched() && form.password().invalid())) {
-            <hlm-field-description>{{ passwordMin }} caractères minimum.</hlm-field-description>
-          }
-          @for (error of form.password().errors(); track error) {
-            <hlm-field-error [validator]="error.kind">{{ error.message }}</hlm-field-error>
-          }
         </hlm-field>
 
         <hlm-field>
-          <label hlmFieldLabel for="confirmPassword">Confirmer le mot de passe</label>
+          <div class="flex items-baseline justify-between gap-2">
+            <label hlmFieldLabel for="confirmPassword">Confirmer le mot de passe</label>
+            @if (form.confirmPassword().touched() && form.confirmPassword().errors()[0]; as error) {
+              <hlm-field-error [validator]="error.kind" class="text-xs">{{
+                error.message
+              }}</hlm-field-error>
+            }
+          </div>
           <input
             hlmInput
             type="password"
@@ -129,11 +153,6 @@ interface SignupModel {
             autocomplete="new-password"
             [formField]="form.confirmPassword"
           />
-          @if (form.confirmPassword().touched() && form.confirmPassword().invalid()) {
-            @for (error of form.confirmPassword().errors(); track error) {
-              <hlm-field-error [validator]="error.kind">{{ error.message }}</hlm-field-error>
-            }
-          }
         </hlm-field>
 
         <hlm-field orientation="horizontal">
@@ -141,12 +160,10 @@ interface SignupModel {
           <label hlmFieldLabel class="font-normal" for="acceptTerms">
             J'accepte les conditions d'utilisation
           </label>
-        </hlm-field>
-        @if (form.acceptTerms().touched() && form.acceptTerms().invalid()) {
-          @for (error of form.acceptTerms().errors(); track error) {
-            <hlm-field-error>{{ error.message }}</hlm-field-error>
+          @if (form.acceptTerms().touched() && form.acceptTerms().errors()[0]; as error) {
+            <hlm-field-error class="ml-auto text-xs">{{ error.message }}</hlm-field-error>
           }
-        }
+        </hlm-field>
 
         <hlm-field>
           <button hlmBtn type="submit" [disabled]="form().submitting()">
@@ -196,37 +213,33 @@ export class SignupForm {
   readonly form = form(
     this.model,
     (path) => {
-      required(path.name, { message: 'Le nom est obligatoire.' });
+      required(path.name, { message: 'Obligatoire' });
       validate(path.name, ({ value }) =>
-        value() !== '' && value().trim() === ''
-          ? { kind: 'blank', message: 'Le nom ne peut pas être fait que d’espaces.' }
-          : null,
+        value() !== '' && value().trim() === '' ? { kind: 'blank', message: 'Obligatoire' } : null,
       );
-      maxLength(path.name, 100, { message: 'Le nom ne peut pas dépasser 100 caractères.' });
+      maxLength(path.name, 100, { message: '100 caractères max.' });
 
-      required(path.email, { message: 'L’adresse e-mail est obligatoire.' });
-      email(path.email, { message: 'Saisissez une adresse e-mail valide.' });
-      maxLength(path.email, 254, { message: 'L’adresse e-mail est trop longue.' });
+      required(path.email, { message: 'Obligatoire' });
+      email(path.email, { message: 'Adresse invalide' });
+      maxLength(path.email, 254, { message: 'Adresse trop longue' });
 
-      required(path.password, { message: 'Le mot de passe est obligatoire.' });
+      required(path.password, { message: 'Obligatoire' });
       minLength(path.password, PASSWORD_MIN, {
-        message: `Le mot de passe doit contenir au moins ${PASSWORD_MIN} caractères.`,
+        message: `${PASSWORD_MIN} caractères min.`,
       });
       maxLength(path.password, PASSWORD_MAX, {
-        message: `Le mot de passe ne peut pas dépasser ${PASSWORD_MAX} caractères.`,
+        message: `${PASSWORD_MAX} caractères max.`,
       });
 
-      required(path.confirmPassword, { message: 'Confirmez votre mot de passe.' });
+      required(path.confirmPassword, { message: 'Obligatoire' });
       validate(path.confirmPassword, ({ value, valueOf }) =>
         value() !== '' && value() !== valueOf(path.password)
-          ? { kind: 'passwordMismatch', message: 'Les mots de passe ne correspondent pas.' }
+          ? { kind: 'passwordMismatch', message: 'Ne correspond pas' }
           : null,
       );
 
       validate(path.acceptTerms, ({ value }) =>
-        value()
-          ? null
-          : { kind: 'required', message: 'Acceptez les conditions d’utilisation pour continuer.' },
+        value() ? null : { kind: 'required', message: 'Obligatoire' },
       );
     },
     {
@@ -256,7 +269,7 @@ export class SignupForm {
         return [
           {
             kind: 'server',
-            message: 'Cette adresse e-mail est déjà utilisée.',
+            message: 'Déjà utilisée',
             fieldTree: field.email,
           },
         ];
@@ -271,7 +284,7 @@ export class SignupForm {
         const errors = failure.details.flatMap((detail) => {
           const target = fields[detail.target];
           return target
-            ? [{ kind: 'server', message: 'Valeur refusée par le serveur.', fieldTree: target }]
+            ? [{ kind: 'server', message: 'Refusé par le serveur', fieldTree: target }]
             : [];
         });
         if (errors.length > 0) {

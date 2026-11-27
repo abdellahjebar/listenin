@@ -85,7 +85,7 @@ describe('SignupForm (story 1, écran)', () => {
     for (const label of ['Nom', 'Adresse e-mail', 'Mot de passe', 'Confirmer le mot de passe']) {
       expect(root.textContent).toContain(label);
     }
-    expect(root.textContent).toContain('15 caractères minimum.');
+    expect(root.textContent).toContain('15 caractères min.');
     expect(root.textContent).toContain("J'accepte les conditions d'utilisation");
   });
 
@@ -101,7 +101,7 @@ describe('SignupForm (story 1, écran)', () => {
     await submit();
 
     http.expectNone('/api/accounts');
-    expect(errorTexts()).toContain('Le nom est obligatoire.');
+    expect(errorTexts()).toContain('Obligatoire');
     expect(document.activeElement?.id).toBe('name');
   });
 
@@ -112,7 +112,7 @@ describe('SignupForm (story 1, écran)', () => {
     await submit();
 
     http.expectNone('/api/accounts');
-    expect(errorTexts()).toContain('Le mot de passe doit contenir au moins 15 caractères.');
+    expect(errorTexts()).toContain('15 caractères min.');
   });
 
   it('confirmation différente : refusée avant tout envoi', async () => {
@@ -121,7 +121,7 @@ describe('SignupForm (story 1, écran)', () => {
     await submit();
 
     http.expectNone('/api/accounts');
-    expect(errorTexts()).toContain('Les mots de passe ne correspondent pas.');
+    expect(errorTexts()).toContain('Ne correspond pas');
   });
 
   it('conditions non cochées : refusées avant tout envoi', async () => {
@@ -130,7 +130,9 @@ describe('SignupForm (story 1, écran)', () => {
     await submit();
 
     http.expectNone('/api/accounts');
-    expect(errorTexts()).toContain('Acceptez les conditions d’utilisation pour continuer.');
+    expect(root.querySelector('#acceptTerms')!.closest('hlm-field')!.textContent).toContain(
+      'Obligatoire',
+    );
   });
 
   it('inscription réussie : corps attendu par l’API, membre gardé, retour à l’accueil', async () => {
@@ -175,7 +177,7 @@ describe('SignupForm (story 1, écran)', () => {
     await settle();
 
     const emailField = root.querySelector('#email')!.closest('hlm-field')!;
-    expect(emailField.textContent).toContain('Cette adresse e-mail est déjà utilisée.');
+    expect(emailField.textContent).toContain('Déjà utilisée');
   });
 
   it('429 : message général, neutre, en haut du formulaire', async () => {
