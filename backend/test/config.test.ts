@@ -11,6 +11,7 @@ describe('loadConfig', () => {
       PORT: 3000,
       LOG_LEVEL: 'info',
       APP_ORIGIN,
+      TRUST_PROXY: 0,
       MONGODB_URI,
     });
   });
