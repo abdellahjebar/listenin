@@ -8,6 +8,8 @@ COPY . .
 RUN npm run build
 
 FROM nginxinc/nginx-unprivileged:stable-alpine AS runtime
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Gabarit : l'image nginx remplace ${API_UPSTREAM} au démarrage et écrit conf.d/default.conf.
+COPY nginx/default.conf.template /etc/nginx/templates/default.conf.template
+ENV API_UPSTREAM=http://api:3000
 COPY --from=build /app/dist/frontend/browser /usr/share/nginx/html
 EXPOSE 8080

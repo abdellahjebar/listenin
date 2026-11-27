@@ -18,11 +18,15 @@ export interface AppOptions {
   appOrigin: string;
   /** Les tests valident aussi chaque réponse : une réponse hors contrat les fait échouer (ADR 0007). */
   validateResponses?: boolean;
+  /** Nombre de proxys de confiance (voir TRUST_PROXY dans config.ts). */
+  trustProxy?: number;
 }
 
 /** Construit l'application sans ouvrir de port : le serveur réel et les tests l'utilisent tous deux. */
 export function createApp(logger: Logger, options: AppOptions): Express {
   const app = express();
+  // Derrière nginx, req.ip devient l'adresse du visiteur, lue dans X-Forwarded-For.
+  app.set('trust proxy', options.trustProxy ?? 0);
 
   app.use(helmet());
   app.use(pinoHttp({ logger }));

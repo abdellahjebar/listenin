@@ -8,6 +8,10 @@ const schema = z.object({
   // Adresse de l'application web, attendue dans l'en-tête Origin des requêtes qui modifient
   // des données (SEC-10). Sans chemin ni barre finale : https://listenin.example
   APP_ORIGIN: z.string().regex(/^https?:\/\/[^/]+$/, 'doit être une origine, sans chemin'),
+  // Nombre de proxys de confiance devant l'API (nginx = 1). Sans ce réglage, derrière un proxy,
+  // tous les visiteurs auraient l'adresse IP du proxy et partageraient les limites de tentatives.
+  // 0 par défaut : l'en-tête X-Forwarded-For, falsifiable, est alors ignoré.
+  TRUST_PROXY: z.coerce.number().int().min(0).max(5).default(0),
   MONGODB_URI: z
     .string()
     .regex(/^mongodb(\+srv)?:\/\//, 'doit commencer par mongodb:// ou mongodb+srv://'),

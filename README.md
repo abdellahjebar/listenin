@@ -41,7 +41,15 @@ Schémas C4 et décisions : [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) et [doc
 
 ## Démarrage rapide
 
-Une base MongoDB locale, une seule fois :
+**Tout lancer avec Docker** (le plus simple) :
+
+```bash
+docker compose up --build
+```
+
+Ouvrir <http://localhost:8080> (utiliser `localhost`, pas `127.0.0.1`). MongoDB, l'API et l'application démarrent dans cet ordre ; les données sont gardées dans un volume Docker entre deux lancements (`docker compose down --volumes` les efface).
+
+**Pour développer** (rechargement automatique), sans Docker pour l'application : une base MongoDB locale, une seule fois :
 
 ```bash
 docker run -d --name listenin-mongo -p 27017:27017 mongo:8
@@ -93,12 +101,7 @@ Contrat d'API ([`backend/openapi.yaml`](backend/openapi.yaml), écrit avant le c
 | `npm run api:docs` | `backend/` | génère la documentation dans `dist/api-docs.html`, à ouvrir en local |
 | `npm run api:types` | `backend/` et `frontend/` | régénère les types TypeScript de l'API, à commiter avec le contrat |
 
-Images Docker :
-
-```bash
-docker build -t listenin-backend backend
-docker build -t listenin-frontend frontend
-```
+Docker : `docker compose up --build` lance tout (voir [Démarrage rapide](#démarrage-rapide)) ; `docker compose logs -f api` suit les journaux de l'API ; `docker compose down` arrête.
 
 ## Structure du dépôt
 
@@ -112,7 +115,7 @@ REPORT.md     rapport d'avancement (jalon du cours Technologies Web)
 
 ## Qualité et intégration continue
 
-À chaque pull request et à chaque push sur `main`, la CI GitHub Actions exécute, pour le backend et le frontend : formatage, lint, types (backend), tests, build, audit des dépendances de production. Elle vérifie aussi le contrat OpenAPI, la conformité des réponses de l'API au contrat (dans les tests) et que les types de l'API du frontend sont à jour. Enfin, elle construit les deux images Docker, **sans les publier**. Un second contrôle vérifie le format du titre et de chaque commit de la pull request. Les actions utilisées sont figées par empreinte SHA.
+À chaque pull request et à chaque push sur `main`, la CI GitHub Actions exécute, pour le backend et le frontend : formatage, lint, types (backend), tests, build, audit des dépendances de production. Elle vérifie aussi le contrat OpenAPI, la conformité des réponses de l'API au contrat (dans les tests) et que les types de l'API du frontend sont à jour. Enfin, elle construit les deux images Docker, **sans les publier**, et les **lance avec `docker compose`** pour vérifier la santé, l'inscription et la connexion de bout en bout. Un second contrôle vérifie le format du titre et de chaque commit de la pull request. Les actions utilisées sont figées par empreinte SHA.
 
 Dependabot propose chaque semaine les mises à jour des dépendances npm, des images Docker et des actions GitHub.
 

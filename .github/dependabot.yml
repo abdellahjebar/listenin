@@ -53,3 +53,12 @@ updates:
     directory: /
     schedule:
       interval: weekly
+
+  # Image MongoDB de compose.yaml : mêmes règles, versions majeures adoptées volontairement.
+  - package-ecosystem: docker-compose
+    directory: /
+    schedule:
+      interval: weekly
+    ignore:
+      - dependency-name: mongo
+        update-types: ['version-update:semver-major']
