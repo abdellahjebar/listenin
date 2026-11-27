@@ -141,6 +141,7 @@ Dependabot propose chaque semaine les mises à jour des dépendances npm, des im
 
 - [docs/PRODUCT.md](docs/PRODUCT.md) : vision et périmètre du palier 1
 - [docs/USER-STORIES.md](docs/USER-STORIES.md) : user stories et critères d'acceptation
+- [docs/INTERFACE.md](docs/INTERFACE.md) : composants d'interface par écran et règles d'usage
 - [docs/DOMAIN.md](docs/DOMAIN.md) : domaines, glossaire et invariants
 - [docs/AUTHORIZATION.md](docs/AUTHORIZATION.md) : matrice d'autorisation
 - [docs/QUALITY.md](docs/QUALITY.md) : exigences de qualité (sécurité, performance, accessibilité…)

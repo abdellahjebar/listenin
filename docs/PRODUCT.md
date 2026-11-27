@@ -68,5 +68,5 @@ Ces points ne bloquent pas le développement, seulement la mise en ligne :
 Un essai avec de vrais musiciens est le critère du palier suivant : il suppose un déploiement restreint et les points bloquants ci-dessus.
 
 ## Questions ouvertes
-- Instruments et genres : liste fermée ou saisie libre ? À décider à la tranche « profil ».
+- ~~Instruments et genres : liste fermée ou saisie libre ?~~ Listes fermées, voir l'[ADR 0011](adr/0011-instruments-et-genres.md).
 - Formats audio, taille et durée maximales : à décider à la tranche « portfolio » (le stockage est choisi : ADR 0005).

@@ -14,6 +14,7 @@ Une décision notable, une page. Les ADR forment un **journal en ajout seulement
 | [0008](0008-acces-mongodb-mongoose.md) | Accès à MongoDB avec Mongoose (complète 0005) | Acceptée |
 | [0009](0009-versionnage-et-publication.md) | Versionnage et publication (remplace le point 5 de 0004) | Acceptée |
 | [0010](0010-base-interface-spartan.md) | Base d'interface avec Spartan et Tailwind v4 | Acceptée |
+| [0011](0011-instruments-et-genres.md) | Instruments et genres en listes fermées | Acceptée |
 
 ## Modèle (MADR « minimal »)
 
