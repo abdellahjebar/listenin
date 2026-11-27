@@ -225,7 +225,7 @@ export interface components {
       | 'classical'
       | 'film-score';
     /** @description Un lien `https://` ou une adresse e-mail. */
-    Contact: string | unknown | unknown;
+    Contact: string;
     ProfileUpdate: {
       name: string;
       instruments: components['schemas']['Instrument'][];
