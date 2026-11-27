@@ -1,0 +1,29 @@
+name: Conventions
+
+# Chaque commit d'une pull request entre tel quel dans l'historique de main (fusion par merge
+# commit, ADR 0009) : son message doit suivre Conventional Commits, comme le titre de la PR.
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: conventions-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  commits:
+    name: Commits et titre
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - name: Vérifier le titre de la PR et chaque commit
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: scripts/check-conventional-commits.sh
