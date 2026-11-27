@@ -21,12 +21,12 @@ Option retenue : « issues, projet GitHub et pull requests », parce que tout re
 2. Le **projet GitHub** « ListenIn » suit l'avancement en cinq colonnes : *À faire*, *Prêt*, *En cours*, *En revue*, *Terminé*.
 3. Une **branche** `type/N-titre-court` par issue (par exemple `feat/14-profil-musicien`).
 4. Une **pull request** dont la description contient `Closes #N`, avec le code, les tests, le contrat OpenAPI et la documentation.
-5. **Fusion en squash** une fois la CI verte. Le titre de la pull request devient le message du commit : en français, avec un préfixe (`feat`, `fix`, `chore`, `docs`, `test`, `ci`, `refactor`).
+5. ~~**Fusion en squash** une fois la CI verte.~~ **Remplacé par l'[ADR 0009](0009-versionnage-et-publication.md)** : fusion par merge commit, chaque commit et le titre de la PR au format Conventional Commits, vérifiés en CI.
 6. **Aucun push direct sur `main`**, y compris pour la documentation.
 
 Les pull requests de Dependabot gardent leur format et sont fusionnées de la même façon.
 
-**Reporté :** backlog complet, vue « feuille de route », champs supplémentaires du projet, `CODEOWNERS`, publication automatique des versions.
+**Reporté :** backlog complet, vue « feuille de route », champs supplémentaires du projet, `CODEOWNERS`. La publication automatique des versions est traitée par l'ADR 0009.
 
 ### Conséquences
 * Bon : chaque changement remonte à une issue, chaque décision à un ADR.

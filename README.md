@@ -110,15 +110,17 @@ REPORT.md     rapport d'avancement (jalon du cours Technologies Web)
 
 ## Qualité et intégration continue
 
-À chaque pull request et à chaque push sur `main`, la CI GitHub Actions exécute, pour le backend et le frontend : formatage, lint, types (backend), tests, build, audit des dépendances de production. Elle vérifie aussi le contrat OpenAPI, la conformité des réponses de l'API au contrat (dans les tests) et que les types de l'API du frontend sont à jour. Enfin, elle construit les deux images Docker, **sans les publier**.
+À chaque pull request et à chaque push sur `main`, la CI GitHub Actions exécute, pour le backend et le frontend : formatage, lint, types (backend), tests, build, audit des dépendances de production. Elle vérifie aussi le contrat OpenAPI, la conformité des réponses de l'API au contrat (dans les tests) et que les types de l'API du frontend sont à jour. Enfin, elle construit les deux images Docker, **sans les publier**. Un second contrôle vérifie le format du titre et de chaque commit de la pull request. Les actions utilisées sont figées par empreinte SHA.
 
 Dependabot propose chaque semaine les mises à jour des dépendances npm, des images Docker et des actions GitHub.
 
 ## Méthode de travail
 
 - Une **issue** par travail (trois formulaires : user story, tâche technique, décision), suivie dans le projet GitHub du dépôt.
-- Une **branche** `type/N-titre-court` et une **pull request** « Closes #N » par issue, même en solo ; fusion en squash, **pas de push direct sur `main`** (voir l'[ADR 0004](docs/adr/0004-gestion-du-travail.md)).
-- **Commits en français**, avec un préfixe (`feat`, `fix`, `chore`, `docs`, `test`, `ci`, `refactor`), un commit par étape.
+- Une **branche** courte `type/N-titre-court` et une **pull request** « Closes #N » par issue, même en solo ; **pas de push direct sur `main`** (voir l'[ADR 0004](docs/adr/0004-gestion-du-travail.md)).
+- **Fusion par merge commit** : tout l'historique est gardé ; `git log --first-parent main` donne une ligne par pull request (voir l'[ADR 0009](docs/adr/0009-versionnage-et-publication.md)).
+- **Commits en français au format Conventional Commits** (`type(zone): résumé`, types `feat`, `fix`, `perf`, `refactor`, `docs`, `test`, `ci`, `build`, `chore`, `revert`), un commit propre par étape. La CI vérifie le titre de la pull request et chaque commit ; en local : `BASE_SHA=origin/main HEAD_SHA=HEAD scripts/check-conventional-commits.sh`.
+- **Versions SemVer** publiées par release-please : il tient à jour une pull request de version (`CHANGELOG.md`) ; la fusionner crée le tag `vX.Y.Z` et la GitHub Release.
 - Toute route ajoutée ou modifiée met à jour le contrat OpenAPI dans la même pull request (voir les ADR [0003](docs/adr/0003-contrat-api-openapi.md) et [0007](docs/adr/0007-outillage-openapi.md)).
 - Les **règles d'autorisation** (qui voit ou modifie quoi) sont couvertes par des tests.
 
