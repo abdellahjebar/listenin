@@ -1,0 +1,27 @@
+name: Publication
+
+# release-please lit les commits Conventional Commits arrivés sur main et tient à jour une
+# « PR de version » (numéro SemVer, CHANGELOG.md). La fusionner crée le tag vX.Y.Z et la
+# GitHub Release (ADR 0009). Rien n'est publié sans cette fusion.
+on:
+  push:
+    branches: [main]
+
+permissions: {}
+
+concurrency:
+  group: release-please
+  cancel-in-progress: false
+
+jobs:
+  release-please:
+    name: PR de version
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
+        with:
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
