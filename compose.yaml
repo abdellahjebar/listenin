@@ -45,6 +45,13 @@ services:
     ports:
       # Seulement sur cette machine, pas sur le réseau local.
       - '127.0.0.1:8080:8080'
+    # Sans contrôle de santé, « up --wait » croit nginx prêt dès son lancement.
+    healthcheck:
+      test: ['CMD', 'wget', '-q', '-O', '/dev/null', 'http://127.0.0.1:8080/']
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
     depends_on:
       api:
         condition: service_healthy

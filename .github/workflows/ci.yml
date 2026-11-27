@@ -114,7 +114,8 @@ jobs:
           base=http://localhost:8080
           # Réponse lue en entier avant d'être vérifiée : « curl | grep -q » échoue au hasard
           # avec pipefail (grep s'arrête tôt, curl reçoit SIGPIPE).
-          health=$(curl --fail --silent "$base/api/health")
+          # Quelques nouvelles tentatives sur la première requête, par sécurité.
+          health=$(curl --fail --silent --retry 5 --retry-delay 2 --retry-all-errors "$base/api/health")
           [[ "$health" == *'"status":"ok"'* ]]
           page=$(curl --fail --silent "$base/inscription")
           [[ "$page" == *'<app-root'* ]]
