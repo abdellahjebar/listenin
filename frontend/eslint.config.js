@@ -47,6 +47,8 @@ module.exports = defineConfig([
         'error',
         { type: 'element', prefix: ['hlm', 'brn'], style: 'kebab-case' },
       ],
+      // Spartan renomme ses entrées (class, checked…) pour suivre les attributs HTML.
+      '@angular-eslint/no-input-rename': 'off',
     },
   },
   {
