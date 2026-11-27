@@ -5,7 +5,10 @@ import { lucideAudioLines } from '@ng-icons/lucide';
 
 /**
  * Mise en page commune des blocs Spartan « signup-two-column » et « login-two-column » :
- * le formulaire à gauche, le panneau visuel à droite (photo à venir, masqué sur mobile).
+ * le formulaire à gauche, l'image à droite (masquée sur mobile).
+ *
+ * La page fait exactement la hauteur de la fenêtre : le document ne défile jamais. Si le
+ * formulaire dépasse (petit écran, zoom à 200 %), seule sa colonne défile (WCAG 1.4.10).
  */
 @Component({
   selector: 'app-auth-layout',
@@ -14,8 +17,8 @@ import { lucideAudioLines } from '@ng-icons/lucide';
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'block' },
   template: `
-    <div class="grid min-h-svh lg:grid-cols-2">
-      <div class="flex flex-col gap-4 p-6 md:p-10">
+    <div class="grid h-svh lg:grid-cols-2">
+      <div class="flex min-h-0 flex-col gap-4 overflow-y-auto p-6 md:px-10 md:py-6">
         <div class="flex justify-center gap-2 md:justify-start">
           <a routerLink="/" class="flex items-center gap-2 font-medium">
             <div
@@ -32,7 +35,15 @@ import { lucideAudioLines } from '@ng-icons/lucide';
           </div>
         </main>
       </div>
-      <div class="bg-muted relative hidden lg:block" aria-hidden="true"></div>
+      <!-- Affiche en entier, calée à gauche ; le fond reprend son beige pour un raccord invisible. -->
+      <div class="relative hidden overflow-hidden bg-[#e5e5de] lg:block">
+        <img
+          src="images/auth-background.webp"
+          alt=""
+          class="absolute inset-0 h-full w-full object-contain object-left"
+          fetchpriority="high"
+        />
+      </div>
     </div>
   `,
 })

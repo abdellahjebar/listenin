@@ -45,7 +45,7 @@ interface LoginModel {
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <form [formRoot]="form" novalidate>
-      <hlm-field-group>
+      <hlm-field-group class="gap-4">
         <div class="flex flex-col items-center gap-1 text-center">
           <h1 class="text-2xl font-bold">Connectez-vous</h1>
           <p class="text-muted-foreground text-sm text-balance">Accédez à votre compte ListenIn</p>
@@ -106,11 +106,10 @@ interface LoginModel {
         <hlm-field-separator>Ou continuer avec</hlm-field-separator>
 
         <hlm-field>
-          <button hlmBtn variant="outline" type="button" disabled aria-describedby="google-soon">
+          <button hlmBtn variant="outline" type="button" disabled>
             <ng-icon name="remixGoogleFill" class="text-xl" aria-hidden="true" />
-            Continuer avec Google
+            Continuer avec Google · bientôt
           </button>
-          <p hlmFieldDescription id="google-soon" class="text-center">Bientôt disponible.</p>
           <p hlmFieldDescription class="text-center">
             Pas encore membre ?
             <a routerLink="/inscription">Créer un compte</a>
