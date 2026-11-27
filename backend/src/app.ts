@@ -8,6 +8,7 @@ import { pinoHttp } from 'pino-http';
 import { errorHandler, notFound } from './middleware/errors.js';
 import { requireSameOrigin } from './middleware/origin.js';
 import { createAccountsRouter, createSessionsRouter } from './modules/identity/index.js';
+import { createProfilesRouter } from './modules/profile/http.js';
 import { healthRouter } from './routes/health.js';
 
 /** Le contrat est à la racine de backend/ : un niveau au-dessus de src/ comme de dist/. */
@@ -48,6 +49,7 @@ export function createApp(logger: Logger, options: AppOptions): Express {
   app.use('/api/health', healthRouter);
   app.use('/api/accounts', createAccountsRouter());
   app.use('/api/sessions', createSessionsRouter());
+  app.use('/api/profiles', createProfilesRouter());
 
   app.use(notFound);
   app.use(errorHandler);
